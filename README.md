@@ -1,5 +1,3 @@
-# Meeting Room Booking System
-
 ## Requirements
 
 - Python 3.13 or newer
