@@ -1,17 +1,8 @@
 from flask import Blueprint, request, redirect, url_for, session, flash
 from models import db, User
+from utils.helpers import *
 
 admin_bp = Blueprint("admin", __name__)
-
-
-def is_logged_in():
-    return "userid" in session
-
-
-def get_current_user():
-    if is_logged_in():
-        return db.session.get(User, session["userid"])
-    return None
 
 
 @admin_bp.route("/admin/users/new", methods=["POST"])
@@ -58,9 +49,7 @@ def admin_create_user():
         return redirect(url_for("dashboard.admin_dashboard"))
 
     try:
-        user = User(
-            fname=fname, lname=lname, email=email, password=password, role=role
-        )
+        user = User(fname=fname, lname=lname, email=email, password=password, role=role)
         db.session.add(user)
         db.session.commit()
         flash("User created successfully", "success")
@@ -87,8 +76,7 @@ def delete_user(user_id):
         return redirect(url_for("dashboard.admin_dashboard"))
 
     # check for existing bookings for user before deletion
-    existing_booking = user_to_delete.bookings.first()
-    if existing_booking:
+    if user_to_delete.bookings:
         flash("Cannot delete user with existing bookings", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
     try:

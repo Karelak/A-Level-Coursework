@@ -1,17 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from models import db, User, Admin, SupportTicket
+from utils.helpers import *
 
 support_bp = Blueprint("support", __name__)
-
-
-def is_logged_in():
-    return "userid" in session
-
-
-def get_current_user():
-    if is_logged_in():
-        return db.session.get(User, session["userid"])
-    return None
 
 
 @support_bp.route("/support", methods=["GET", "POST"])

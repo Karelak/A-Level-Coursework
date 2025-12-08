@@ -2,18 +2,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from models import db, User, Room, Booking
 from routes.rooms import sorter
 from datetime import datetime
+from utils.helpers import *
 
 bookings_bp = Blueprint("bookings", __name__)
-
-
-def is_logged_in():
-    return "userid" in session
-
-
-def get_current_user():
-    if is_logged_in():
-        return db.session.get(User, session["userid"])
-    return None
 
 
 @bookings_bp.route("/bookings")

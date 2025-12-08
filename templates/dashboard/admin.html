@@ -19,7 +19,7 @@ Booking System{% endblock %} {% block content %}
     {% for booking in bookings %}
     <tr>
       <td>{{ booking.bookingid }}</td>
-      <td>{{ booking.employee.fname }} {{ booking.employee.lname }}</td>
+      <td>{{ booking.user.fname }} {{ booking.user.lname }}</td>
       <td>{{ booking.room.roomname }} (Floor {{ booking.room.floor }})</td>
       <td>{{ booking.timebegin | iso_to_dmy_hm }}</td>
       <td>{{ booking.timefinish | iso_to_dmy_hm }}</td>
@@ -48,7 +48,7 @@ Booking System{% endblock %} {% block content %}
 <hr />
 
 <h3>All Users</h3>
-{% if employees %}
+{% if users %}
 <table border="1">
   <thead>
     <tr>
@@ -59,16 +59,16 @@ Booking System{% endblock %} {% block content %}
     </tr>
   </thead>
   <tbody>
-    {% for employee in employees %}
+    {% for user in users %}
     <tr>
-      <td>{{ employee.employeeid }}</td>
-      <td>{{ employee.fname }} {{ employee.lname }}</td>
-      <td>{{ employee.email }}</td>
-      <td>{{ employee.role }}</td>
+      <td>{{ user.userid }}</td>
+      <td>{{ user.fname }} {{ user.lname }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
       <td>
         <form
           method="POST"
-          action="{{ url_for('employees.delete_employee', employee_id=employee.employeeid) }}"
+          action="{{ url_for('admin.delete_user', user_id=user.userid) }}"
           style="display: inline"
         >
           <button
@@ -197,7 +197,7 @@ Booking System{% endblock %} {% block content %}
     {% for ticket in tickets %}
     <tr>
       <td>{{ ticket.ticketid }}</td>
-      <td>{{ ticket.employee.fname }} {{ ticket.employee.lname }}</td>
+      <td>{{ ticket.user.fname }} {{ ticket.user.lname }}</td>
       <td>{{ ticket.subject }}</td>
       <td>{{ ticket.message }}</td>
       <td>{{ ticket.created_at }}</td>

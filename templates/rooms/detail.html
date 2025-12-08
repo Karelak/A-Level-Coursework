@@ -32,7 +32,7 @@ Booking System{% endblock %} {% block content %}
   <thead>
     <tr>
       <th>Booking ID</th>
-      <th>Employee</th>
+      <th>User</th>
       <th>Start Time</th>
       <th>End Time</th>
     </tr>
@@ -41,9 +41,9 @@ Booking System{% endblock %} {% block content %}
     {% for booking in bookings %}
     <tr>
       <td>{{ booking.bookingid }}</td>
-      <td>{{ booking.employee.fname }} {{ booking.employee.lname }}</td>
-      <td>{{ booking.timebegin }}</td>
-      <td>{{ booking.timefinish }}</td>
+      <td>{{ booking.user.fname }} {{ booking.user.lname }}</td>
+      <td>{{ booking.timebegin | iso_to_dmy_hm }}</td>
+      <td>{{ booking.timefinish | iso_to_dmy_hm }}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -53,7 +53,5 @@ Booking System{% endblock %} {% block content %}
 {% endif %}
 
 <hr />
-
-<p><a href="{{ url_for('bookings.new_booking') }}">Book This Room</a></p>
 <p><a href="{{ url_for('rooms.rooms') }}">Back to Rooms List</a></p>
 {% endblock %}

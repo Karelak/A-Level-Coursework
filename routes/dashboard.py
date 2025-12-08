@@ -1,18 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash
 from models import db, User, Booking, Room, SupportTicket
 from routes.rooms import sorter
+from utils.helpers import *
 
 dashboard_bp = Blueprint("dashboard", __name__)
-
-
-def is_logged_in():
-    return "userid" in session
-
-
-def get_current_user():
-    if is_logged_in():
-        return db.session.get(User, session["userid"])
-    return None
 
 
 @dashboard_bp.route("/")
