@@ -42,7 +42,6 @@ class Room(db.Model):
     )
     floor = db.Column(db.Integer, nullable=False)
     roomname = db.Column(db.Text, nullable=False)
-    capacity = db.Column(db.Integer, nullable=False)
     bookings = db.relationship(
         "Booking", back_populates="room", cascade="all, delete-orphan"
     )

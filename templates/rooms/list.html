@@ -12,7 +12,6 @@ endblock %} {% block content %}
     <tr>
       <th>Room Name</th>
       <th>Floor</th>
-      <th>Capacity</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -21,7 +20,6 @@ endblock %} {% block content %}
     <tr>
       <td>{{ room.roomname }}</td>
       <td>{{ room.floor }}</td>
-      <td>{{ room.capacity }} people</td>
       <td>
         <a href="{{ url_for('rooms.room_detail', room_id=room.roomid) }}"
           >View Details</a

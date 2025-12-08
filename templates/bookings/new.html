@@ -11,8 +11,7 @@ System{% endblock %} {% block content %}
       <option value="">-- Choose a room --</option>
       {% for room in rooms %}
       <option value="{{ room.roomid }}">
-        {{ room.roomname }} (Floor {{ room.floor }}, Capacity: {{ room.capacity
-        }})
+        {{ room.roomname }} (Floor {{ room.floor }}
       </option>
       {% endfor %}
     </select>

@@ -36,10 +36,9 @@ def admin_create_room():
 
     roomname = request.form.get("roomname", "").strip()
     floor = request.form.get("floor", "").strip()
-    capacity = request.form.get("capacity", "").strip()
 
     # check if all fields are provided
-    if not all([roomname, floor, capacity]):
+    if not all([roomname, floor]):
         flash("All fields are required", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
 
@@ -59,24 +58,6 @@ def admin_create_room():
     if floor_num < 0:
         flash("Floor must be 0 or greater", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
-
-    # validate capacity is a valid integer
-    try:
-        capacity_num = int(capacity)
-    except ValueError:
-        flash("Capacity must be a valid number", "error")
-        return redirect(url_for("dashboard.admin_dashboard"))
-
-    # validate capacity is positive
-    if capacity_num <= 0:
-        flash("Capacity must be greater than 0", "error")
-        return redirect(url_for("dashboard.admin_dashboard"))
-
-    # validate reasonable capacity limit, 200 is max for the building
-    if capacity_num > 200:
-        flash("Capacity cannot exceed 200", "error")
-        return redirect(url_for("dashboard.admin_dashboard"))
-
     # check for duplicate room on same floor
     existing_room = Room.query.filter_by(floor=floor_num, roomname=roomname).first()
     if existing_room:
@@ -84,7 +65,7 @@ def admin_create_room():
         return redirect(url_for("dashboard.admin_dashboard"))
 
     try:
-        room = Room(roomname=roomname, floor=floor_num, capacity=capacity_num)
+        room = Room(roomname=roomname, floor=floor_num)
         db.session.add(room)
         db.session.commit()
         flash("Room created successfully", "success")
