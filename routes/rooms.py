@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import db, Employee, Room, Booking
+from models import db, User, Room, Booking
 
 rooms_bp = Blueprint("rooms", __name__)
 
@@ -17,12 +17,12 @@ def sorter(items, key_func):
 
 
 def is_logged_in():
-    return "employeeid" in session
+    return "userid" in session
 
 
 def get_current_user():
     if is_logged_in():
-        return db.session.get(Employee, session["employeeid"])
+        return db.session.get(User, session["userid"])
     return None
 
 

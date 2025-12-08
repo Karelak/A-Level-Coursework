@@ -4,34 +4,35 @@ from datetime import datetime
 db = SQLAlchemy()
 
 
-class Employee(db.Model):
-    __tablename__ = "employees"
+class User(db.Model):
+    __tablename__ = "users"
 
-    employeeid = db.Column(
+    userid = db.Column(
         db.Integer, primary_key=True, autoincrement=True, nullable=False, unique=True
     )
     fname = db.Column(db.Text, nullable=False)
     lname = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False)
     password = db.Column(db.Text, nullable=False)
-    role = db.Column(db.Text, nullable=False, default="staff")
+    # Only two roles supported now: 'user' and 'admin'
+    role = db.Column(db.Text, nullable=False, default="user")
 
     bookings = db.relationship(
-        "Booking", back_populates="employee", cascade="all, delete-orphan"
+        "Booking", back_populates="user", cascade="all, delete-orphan"
     )
     support_tickets = db.relationship(
-        "SupportTicket", back_populates="employee", cascade="all, delete-orphan"
+        "SupportTicket", back_populates="user", cascade="all, delete-orphan"
     )
     admin_profile = db.relationship(
-        "Admin", back_populates="employee", uselist=False, cascade="all, delete-orphan"
+        "Admin", back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
 
     __table_args__ = (
-        db.CheckConstraint("role IN ('staff', 'senior', 'admin')", name="check_role"),
+        db.CheckConstraint("role IN ('user', 'admin')", name="check_role"),
     )
 
     def __repr__(self):
-        return f"<Employee {self.fname} {self.lname}>"
+        return f"<User {self.fname} {self.lname}>"
 
 
 class Room(db.Model):
@@ -57,9 +58,9 @@ class Booking(db.Model):
     bookingid = db.Column(
         db.Integer, primary_key=True, autoincrement=True, nullable=False, unique=True
     )
-    employeeid = db.Column(
+    userid = db.Column(
         db.Integer,
-        db.ForeignKey("employees.employeeid", ondelete="CASCADE", onupdate="CASCADE"),
+        db.ForeignKey("users.userid", ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False,
     )
     roomid = db.Column(
@@ -73,7 +74,7 @@ class Booking(db.Model):
     timefinish = db.Column(db.Text)
 
     # Relationships
-    employee = db.relationship("Employee", back_populates="bookings")
+    user = db.relationship("User", back_populates="bookings")
     room = db.relationship("Room", back_populates="bookings")
 
     def __repr__(self):
@@ -86,9 +87,9 @@ class Admin(db.Model):
     adminid = db.Column(
         db.Integer, primary_key=True, autoincrement=True, nullable=False, unique=True
     )
-    employeeid = db.Column(
+    userid = db.Column(
         db.Integer,
-        db.ForeignKey("employees.employeeid", ondelete="CASCADE", onupdate="CASCADE"),
+        db.ForeignKey("users.userid", ondelete="CASCADE", onupdate="CASCADE"),
         nullable=True,
     )
     fname = db.Column(db.Text, nullable=False)
@@ -96,7 +97,7 @@ class Admin(db.Model):
     email = db.Column(db.Text, nullable=False)
 
     # Relationships
-    employee = db.relationship("Employee", back_populates="admin_profile")
+    user = db.relationship("User", back_populates="admin_profile")
     support_tickets = db.relationship(
         "SupportTicket", back_populates="admin", cascade="all, delete-orphan"
     )
@@ -111,9 +112,9 @@ class SupportTicket(db.Model):
     ticketid = db.Column(
         db.Integer, primary_key=True, autoincrement=True, nullable=False, unique=True
     )
-    employeeid = db.Column(
+    userid = db.Column(
         db.Integer,
-        db.ForeignKey("employees.employeeid", ondelete="CASCADE", onupdate="CASCADE"),
+        db.ForeignKey("users.userid", ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False,
     )
     adminid = db.Column(
@@ -128,7 +129,7 @@ class SupportTicket(db.Model):
     )
 
     # Relationships
-    employee = db.relationship("Employee", back_populates="support_tickets")
+    user = db.relationship("User", back_populates="support_tickets")
     admin = db.relationship("Admin", back_populates="support_tickets")
 
     def __repr__(self):

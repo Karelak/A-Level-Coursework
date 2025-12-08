@@ -1,16 +1,16 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import db, Employee
+from models import db, User
 
 auth_bp = Blueprint("auth", __name__)
 
 
 def is_logged_in():
-    return "employeeid" in session
+    return "userid" in session
 
 
 def get_current_user():
     if is_logged_in():
-        return db.session.get(Employee, session["employeeid"])
+        return db.session.get(User, session["userid"])
     return None
 
 
@@ -20,15 +20,15 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        employee = Employee.query.filter_by(email=email).first()
-        if employee and employee.password == password:
-            session["employeeid"] = employee.employeeid
-            session["role"] = employee.role
+        user = User.query.filter_by(email=email).first()
+        if user and user.password == password:
+            session["userid"] = user.userid
+            session["role"] = user.role
             flash("Login successful", "success")
-            if employee.role == "admin":
+            if user.role == "admin":
                 return redirect(url_for("dashboard.admin_dashboard"))
             else:
-                # staff, senior, or any other non-admin role
+                # non-admin role
                 return redirect(url_for("dashboard.dashboard"))
         else:
             flash("Invalid email or password", "error")

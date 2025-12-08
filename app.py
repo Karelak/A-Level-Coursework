@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, Employee, Admin, Room, Booking, SupportTicket
+from models import db, Admin, User, Room, Booking, SupportTicket
 import os
 from datetime import datetime
 
@@ -42,20 +42,20 @@ app.register_blueprint(admin_bp)
 def init_db():
     with app.app_context():
         db.create_all()
-        # Create admin account if no employees exist
-        if Employee.query.count() == 0:
-            admin_employee = Employee(
+        # Create admin account if no users exist
+        if User.query.count() == 0:
+            admin_user = User(
                 fname="Admin",
                 lname="User",
                 email="admin@caa.co.uk",
                 password="admin123",
                 role="admin",
             )
-            db.session.add(admin_employee)
-            db.session.flush()  # Flush to get the employeeid
+            db.session.add(admin_user)
+            db.session.flush()  # Flush to get the userid
 
             admin = Admin(
-                employeeid=admin_employee.employeeid,
+                userid=admin_user.userid,
                 fname="Admin",
                 lname="User",
                 email="admin@caa.co.uk",

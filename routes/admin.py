@@ -1,16 +1,16 @@
 from flask import Blueprint, request, redirect, url_for, session, flash
-from models import db, Employee
+from models import db, User
 
 admin_bp = Blueprint("admin", __name__)
 
 
 def is_logged_in():
-    return "employeeid" in session
+    return "userid" in session
 
 
 def get_current_user():
     if is_logged_in():
-        return db.session.get(Employee, session["employeeid"])
+        return db.session.get(User, session["userid"])
     return None
 
 
@@ -31,8 +31,8 @@ def admin_create_user():
         flash("All fields are required", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
 
-    # Validate role
-    if role not in ["staff", "senior", "admin"]:
+    # Validate role to only 'user' or 'admin'
+    if role not in ["user", "admin"]:
         flash("Invalid role selected", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
 
@@ -52,16 +52,16 @@ def admin_create_user():
         return redirect(url_for("dashboard.admin_dashboard"))
 
     # Check for existing email
-    existing = Employee.query.filter_by(email=email).first()
+    existing = User.query.filter_by(email=email).first()
     if existing:
         flash("Email already exists", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
 
     try:
-        employee = Employee(
+        user = User(
             fname=fname, lname=lname, email=email, password=password, role=role
         )
-        db.session.add(employee)
+        db.session.add(user)
         db.session.commit()
         flash("User created successfully", "success")
     except Exception as e:
@@ -81,18 +81,18 @@ def delete_user(user_id):
         flash("Access denied", "error")
         return redirect(url_for("dashboard.dashboard"))
 
-    employee = db.session.get(Employee, user_id)
-    if not employee:
+    user_to_delete = db.session.get(User, user_id)
+    if not user_to_delete:
         flash("User not found", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
 
     # check for existing bookings for user before deletion
-    existing_booking = employee.bookings.first()
+    existing_booking = user_to_delete.bookings.first()
     if existing_booking:
         flash("Cannot delete user with existing bookings", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
     try:
-        db.session.delete(employee)
+        db.session.delete(user_to_delete)
         db.session.commit()
         flash("User deleted successfully", "success")
     except Exception as e:

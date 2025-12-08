@@ -1,16 +1,16 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import db, Employee, Admin, SupportTicket
+from models import db, User, Admin, SupportTicket
 
 support_bp = Blueprint("support", __name__)
 
 
 def is_logged_in():
-    return "employeeid" in session
+    return "userid" in session
 
 
 def get_current_user():
     if is_logged_in():
-        return db.session.get(Employee, session["employeeid"])
+        return db.session.get(User, session["userid"])
     return None
 
 
@@ -28,7 +28,7 @@ def support():
         admin = Admin.query.first()
         if admin:
             ticket = SupportTicket(
-                employeeid=user.employeeid,
+                userid=user.userid,
                 adminid=admin.adminid,
                 subject=subject,
                 message=message,
@@ -40,7 +40,7 @@ def support():
         else:
             flash("No admin available. Please try again later.", "error")
 
-    tickets = SupportTicket.query.filter_by(employeeid=user.employeeid).all()
+    tickets = SupportTicket.query.filter_by(userid=user.userid).all()
     return render_template("support/form.html", user=user, tickets=tickets)
 
 

@@ -8,7 +8,7 @@ Booking System{% endblock %} {% block content %}
   <thead>
     <tr>
       <th>Booking ID</th>
-      <th>Employee</th>
+      <th>User</th>
       <th>Room</th>
       <th>Start Time</th>
       <th>End Time</th>
@@ -47,12 +47,12 @@ Booking System{% endblock %} {% block content %}
 
 <hr />
 
-<h3>All Employees</h3>
+<h3>All Users</h3>
 {% if employees %}
 <table border="1">
   <thead>
     <tr>
-      <th>Employee ID</th>
+      <th>User ID</th>
       <th>Name</th>
       <th>Email</th>
       <th>Role</th>
@@ -65,12 +65,26 @@ Booking System{% endblock %} {% block content %}
       <td>{{ employee.fname }} {{ employee.lname }}</td>
       <td>{{ employee.email }}</td>
       <td>{{ employee.role }}</td>
+      <td>
+        <form
+          method="POST"
+          action="{{ url_for('employees.delete_employee', employee_id=employee.employeeid) }}"
+          style="display: inline"
+        >
+          <button
+            type="submit"
+            onclick="return confirm('Are you sure you want to delete this user?')"
+          >
+            Delete
+          </button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 {% else %}
-<p>No employees in the system.</p>
+<p>No users in the system.</p>
 {% endif %}
 
 <h4>Create New User</h4>
@@ -94,8 +108,7 @@ Booking System{% endblock %} {% block content %}
   <div>
     <label for="role">Role:</label>
     <select id="role" name="role" required>
-      <option value="staff">Staff</option>
-      <option value="senior">Senior</option>
+      <option value="user">User</option>
       <option value="admin">Admin</option>
     </select>
   </div>
@@ -173,7 +186,7 @@ Booking System{% endblock %} {% block content %}
   <thead>
     <tr>
       <th>Ticket ID</th>
-      <th>Employee</th>
+      <th>User</th>
       <th>Subject</th>
       <th>Message</th>
       <th>Created At</th>

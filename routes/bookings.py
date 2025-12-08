@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import db, Employee, Room, Booking
+from models import db, User, Room, Booking
 from routes.rooms import sorter
 from datetime import datetime
 
@@ -7,12 +7,12 @@ bookings_bp = Blueprint("bookings", __name__)
 
 
 def is_logged_in():
-    return "employeeid" in session
+    return "userid" in session
 
 
 def get_current_user():
     if is_logged_in():
-        return db.session.get(Employee, session["employeeid"])
+        return db.session.get(User, session["userid"])
     return None
 
 
@@ -22,7 +22,7 @@ def bookings():
         return redirect(url_for("auth.login"))
 
     user = get_current_user()
-    user_bookings = Booking.query.filter_by(employeeid=user.employeeid).all()
+    user_bookings = Booking.query.filter_by(userid=user.userid).all()
     sorted_bookings = sorter(
         user_bookings,
         key_func=lambda booking: (
@@ -130,7 +130,7 @@ def new_booking():
 
         try:
             booking = Booking(
-                employeeid=user.employeeid,
+                userid=user.userid,
                 roomid=roomid,
                 timebegin=timebegin,
                 timefinish=timefinish,
@@ -161,7 +161,7 @@ def cancel_booking(booking_id):
     user = get_current_user()
     booking = Booking.query.get_or_404(booking_id)
 
-    if booking.employeeid != user.employeeid and user.role != "admin":
+    if booking.userid != user.userid and user.role != "admin":
         flash("You can only cancel your own bookings", "error")
         return redirect(url_for("bookings.bookings"))
 
