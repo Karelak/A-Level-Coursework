@@ -42,51 +42,11 @@ System{% endblock %} {% block content %}
       <td>{{ ticket.ticketid }}</td>
       <td>{{ ticket.subject }}</td>
       <td>{{ ticket.message }}</td>
-      <td>{{ ticket.created_at }}</td>
+      <td>{{ ticket.created_at | iso_to_dmy_hm }}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 {% else %}
 <p>You have not submitted any support tickets.</p>
-{% endif %}
-
-<hr />
-
-<h3>Frequently Asked Questions</h3>
-
-<h4>How do I book a meeting room?</h4>
-<p>
-  Click on "My Bookings" in the navigation menu, then click "Create New
-  Booking". Select a room, choose your time slot, and submit the form.
-</p>
-
-<h4>How do I cancel a booking?</h4>
-<p>
-  Go to "My Bookings" and click the "Cancel" button next to the booking you wish
-  to cancel.
-</p>
-
-<h4>What happens if there's a conflict?</h4>
-<p>
-  The system automatically checks for conflicts. If the room is already booked
-  for your selected time, you will receive an error message and need to choose a
-  different time or room.
-</p>
-
-<h4>How do I view room details?</h4>
-<p>
-  Click on "Rooms" in the navigation menu to see all available rooms. Click
-  "View Details" next to any room to see its capacity, floor, and current
-  bookings.
-</p>
-
-<h4>Who can I contact for technical support?</h4>
-<p>
-  Submit a support ticket using the form above, and an administrator will
-  respond as soon as possible.
-</p>
-
-<hr />
-
-{% endblock %}
+{% endif %} {% endblock %}

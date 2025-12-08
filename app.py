@@ -55,9 +55,9 @@ def init_db():
             )
             db.session.add(admin_user)
             db.session.commit()
-            print("Database initialized with admin account")
+            print("Database initialised with starter admin account")
 
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True, host="0.0.0.0", port=8000)
+    app.run(debug=True, port=8000)

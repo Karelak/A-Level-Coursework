@@ -32,5 +32,13 @@
       <h3 class="flash-{{ category }}">{{ message }}</h3>
       {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
     </main>
+
+    <footer>
+      <p>&copy; 2024 CAA Meeting Room Booking System. All rights reserved.</p>
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+      />
+    </footer>
   </body>
 </html>

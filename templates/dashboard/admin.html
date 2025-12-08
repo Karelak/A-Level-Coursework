@@ -56,6 +56,7 @@ Booking System{% endblock %} {% block content %}
       <th>Name</th>
       <th>Email</th>
       <th>Role</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -128,6 +129,7 @@ Booking System{% endblock %} {% block content %}
       <th>Room Name</th>
       <th>Floor</th>
       <th>Capacity</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -200,7 +202,7 @@ Booking System{% endblock %} {% block content %}
       <td>{{ ticket.user.fname }} {{ ticket.user.lname }}</td>
       <td>{{ ticket.subject }}</td>
       <td>{{ ticket.message }}</td>
-      <td>{{ ticket.created_at }}</td>
+      <td>{{ ticket.created_at | iso_to_dmy_hm }}</td>
       <td>
         <form
           method="POST"
@@ -211,7 +213,7 @@ Booking System{% endblock %} {% block content %}
             type="submit"
             onclick="return confirm('Are you sure you want to delete this ticket?')"
           >
-            Cancel
+            Delete
           </button>
         </form>
       </td>

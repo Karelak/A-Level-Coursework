@@ -9,7 +9,12 @@ header {
   color: white;
   padding: 1rem;
 }
-
+footer {
+  background-color: #003366;
+  color: white;
+  padding: 1rem;
+  position: relative;
+}
 nav a {
   color: white;
   margin-right: 1rem;
@@ -22,6 +27,7 @@ nav a:hover {
 
 main {
   padding: 1rem 2rem;
+  padding-bottom: 4rem;
 }
 
 .flash-success {
