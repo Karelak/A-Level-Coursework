@@ -114,3 +114,35 @@ def admin_create_room():
         flash(f"Error creating room: {str(e)}", "error")
 
     return redirect(url_for("dashboard.admin_dashboard"))
+
+
+@rooms_bp.route("/admin/rooms/<int:room_id>/delete", methods=["POST"])
+def delete_room(room_id):
+    if not is_logged_in():
+        return redirect(url_for("auth.login"))
+
+    user = get_current_user()
+    if not user or user.role != "admin":
+        flash("Access denied", "error")
+        return redirect(url_for("dashboard.dashboard"))
+
+    room = db.session.get(Room, room_id)
+    if not room:
+        flash("Room not found", "error")
+        return redirect(url_for("dashboard.admin_dashboard"))
+
+    # check for existing bookings before deletion
+    existing_booking = Booking.query.filter_by(roomid=room_id).first()
+    if existing_booking:
+        flash("Cannot delete room with existing bookings", "error")
+        return redirect(url_for("dashboard.admin_dashboard"))
+
+    try:
+        db.session.delete(room)
+        db.session.commit()
+        flash("Room deleted successfully", "success")
+    except Exception:
+        db.session.rollback()
+        flash("An error occurred while deleting the room", "error")
+
+    return redirect(url_for("dashboard.admin_dashboard"))

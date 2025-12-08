@@ -8,6 +8,12 @@ def is_logged_in():
     return "employeeid" in session
 
 
+def get_current_user():
+    if is_logged_in():
+        return db.session.get(Employee, session["employeeid"])
+    return None
+
+
 @admin_bp.route("/admin/users/new", methods=["POST"])
 def admin_create_user():
     if not is_logged_in() or session.get("role") != "admin":
@@ -62,4 +68,34 @@ def admin_create_user():
         db.session.rollback()
         flash(f"Error creating user: {str(e)}", "error")
 
+    return redirect(url_for("dashboard.admin_dashboard"))
+
+
+@admin_bp.route("/admin/users/<int:user_id>/delete", methods=["POST"])
+def delete_user(user_id):
+    if not is_logged_in():
+        return redirect(url_for("auth.login"))
+
+    user = get_current_user()
+    if not user or user.role != "admin":
+        flash("Access denied", "error")
+        return redirect(url_for("dashboard.dashboard"))
+
+    employee = db.session.get(Employee, user_id)
+    if not employee:
+        flash("User not found", "error")
+        return redirect(url_for("dashboard.admin_dashboard"))
+
+    # check for existing bookings for user before deletion
+    existing_booking = employee.bookings.first()
+    if existing_booking:
+        flash("Cannot delete user with existing bookings", "error")
+        return redirect(url_for("dashboard.admin_dashboard"))
+    try:
+        db.session.delete(employee)
+        db.session.commit()
+        flash("User deleted successfully", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error deleting user: {str(e)}", "error")
     return redirect(url_for("dashboard.admin_dashboard"))
