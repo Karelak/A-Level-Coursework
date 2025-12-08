@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import db, User, Admin, SupportTicket
+from utils.models import db, User, SupportTicket
 from utils.helpers import *
 
 support_bp = Blueprint("support", __name__)
@@ -16,11 +16,11 @@ def support():
         subject = request.form.get("subject")
         message = request.form.get("message")
 
-        admin = Admin.query.first()
+        admin = User.query.filter_by(role="admin").first()
         if admin:
             ticket = SupportTicket(
                 userid=user.userid,
-                adminid=admin.adminid,
+                adminid=admin.userid,
                 subject=subject,
                 message=message,
             )

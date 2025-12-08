@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import db, User, Room, Booking
+from utils.models import db, User, Room, Booking
 from utils.helpers import *
 
 rooms_bp = Blueprint("rooms", __name__)

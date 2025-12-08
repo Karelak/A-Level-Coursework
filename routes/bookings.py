@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import db, User, Room, Booking
+from utils.models import db, User, Room, Booking
 from routes.rooms import sorter
 from datetime import datetime
 from utils.helpers import *

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, session, flash
-from models import db, User
+from utils.models import db, User
 from utils.helpers import *
 
 admin_bp = Blueprint("admin", __name__)

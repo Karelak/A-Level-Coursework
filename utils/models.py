@@ -14,17 +14,16 @@ class User(db.Model):
     lname = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False)
     password = db.Column(db.Text, nullable=False)
-    # Only two roles supported now: 'user' and 'admin'
     role = db.Column(db.Text, nullable=False, default="user")
 
     bookings = db.relationship(
         "Booking", back_populates="user", cascade="all, delete-orphan"
     )
     support_tickets = db.relationship(
-        "SupportTicket", back_populates="user", cascade="all, delete-orphan"
-    )
-    admin_profile = db.relationship(
-        "Admin", back_populates="user", uselist=False, cascade="all, delete-orphan"
+        "SupportTicket",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        foreign_keys="SupportTicket.userid",
     )
 
     __table_args__ = (
@@ -81,31 +80,6 @@ class Booking(db.Model):
         return f"<Booking {self.bookingid} - Room {self.roomid}>"
 
 
-class Admin(db.Model):
-    __tablename__ = "admins"
-
-    adminid = db.Column(
-        db.Integer, primary_key=True, autoincrement=True, nullable=False, unique=True
-    )
-    userid = db.Column(
-        db.Integer,
-        db.ForeignKey("users.userid", ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=True,
-    )
-    fname = db.Column(db.Text, nullable=False)
-    lname = db.Column(db.Text, nullable=False)
-    email = db.Column(db.Text, nullable=False)
-
-    # Relationships
-    user = db.relationship("User", back_populates="admin_profile")
-    support_tickets = db.relationship(
-        "SupportTicket", back_populates="admin", cascade="all, delete-orphan"
-    )
-
-    def __repr__(self):
-        return f"<Admin {self.fname} {self.lname}>"
-
-
 class SupportTicket(db.Model):
     __tablename__ = "supporttickets"
 
@@ -119,7 +93,7 @@ class SupportTicket(db.Model):
     )
     adminid = db.Column(
         db.Integer,
-        db.ForeignKey("admins.adminid", ondelete="CASCADE", onupdate="CASCADE"),
+        db.ForeignKey("users.userid", ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False,
     )
     subject = db.Column(db.Text, nullable=False)
@@ -129,8 +103,10 @@ class SupportTicket(db.Model):
     )
 
     # Relationships
-    user = db.relationship("User", back_populates="support_tickets")
-    admin = db.relationship("Admin", back_populates="support_tickets")
+    user = db.relationship(
+        "User", back_populates="support_tickets", foreign_keys=[userid]
+    )
+    admin = db.relationship("User", foreign_keys=[adminid])
 
     def __repr__(self):
         return f"<SupportTicket {self.ticketid} - {self.subject}>"

@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, Admin, User, Room, Booking, SupportTicket
+from utils.models import db, User, Room, Booking, SupportTicket
 import os
 from datetime import datetime
 from utils.helpers import *
@@ -54,16 +54,6 @@ def init_db():
                 role="admin",
             )
             db.session.add(admin_user)
-            db.session.flush()  # Flush to get the userid
-
-            admin = Admin(
-                userid=admin_user.userid,
-                fname="Admin",
-                lname="User",
-                email="admin@caa.co.uk",
-            )
-            db.session.add(admin)
-
             db.session.commit()
             print("Database initialized with admin account")
 
