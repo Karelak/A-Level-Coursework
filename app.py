@@ -20,6 +20,7 @@ app.config["SECRET_KEY"] = os.urandom(32)
 db.init_app(app)
 
 
+# filters
 @app.template_filter("iso_to_dmy_hm")
 def iso_to_dmy_hm(value):
     if not value:
