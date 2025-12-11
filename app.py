@@ -1,5 +1,5 @@
 from flask import Flask
-from utils.models import db, User, Room, Booking, SupportTicket
+from utils.models import db, User
 import os
 from datetime import datetime
 from utils.helpers import *
