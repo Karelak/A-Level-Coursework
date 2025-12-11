@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from utils.models import db, Room, Booking
 from datetime import datetime
-from utils.helpers import is_logged_in, get_current_user, sorter
+from utils.helpers import is_logged_in, get_current_user, quicksort
 
 bookings_bp = Blueprint("bookings", __name__)
 
@@ -13,7 +13,7 @@ def bookings():
 
     user = get_current_user()
     user_bookings = Booking.query.filter_by(userid=user.userid).all()
-    sorted_bookings = sorter(
+    sorted_bookings = quicksort(
         user_bookings,
         key_func=lambda booking: (
             booking.room.roomname if booking.room is not None else "",
@@ -40,7 +40,7 @@ def new_booking():
         if not all([roomid, timebegin, timefinish]):
             flash("All fields are required", "error")
             rooms = Room.query.all()
-            rooms_sorted = sorter(
+            rooms_sorted = quicksort(
                 rooms,
                 key_func=lambda room: (room.roomname,),
             )
@@ -51,7 +51,7 @@ def new_booking():
         if not room:
             flash("Invalid room selected", "error")
             rooms = Room.query.all()
-            rooms_sorted = sorter(
+            rooms_sorted = quicksort(
                 rooms,
                 key_func=lambda room: (room.roomname,),
             )
@@ -64,7 +64,7 @@ def new_booking():
         except ValueError:
             flash("Invalid date/time format", "error")
             rooms = Room.query.all()
-            rooms_sorted = sorter(
+            rooms_sorted = quicksort(
                 rooms,
                 key_func=lambda room: (room.roomname,),
             )
@@ -74,7 +74,7 @@ def new_booking():
         if finish_dt <= begin_dt:
             flash("End time must be after start time", "error")
             rooms = Room.query.all()
-            rooms_sorted = sorter(
+            rooms_sorted = quicksort(
                 rooms,
                 key_func=lambda room: (room.roomname,),
             )
@@ -84,7 +84,7 @@ def new_booking():
         if begin_dt < datetime.now():
             flash("Cannot create bookings in the past", "error")
             rooms = Room.query.all()
-            rooms_sorted = sorter(
+            rooms_sorted = quicksort(
                 rooms,
                 key_func=lambda room: (room.roomname,),
             )
@@ -96,7 +96,7 @@ def new_booking():
         if duration_hours > 8:
             flash("Booking duration cannot exceed 8 hours", "error")
             rooms = Room.query.all()
-            rooms_sorted = sorter(
+            rooms_sorted = quicksort(
                 rooms,
                 key_func=lambda room: (room.roomname,),
             )
@@ -112,7 +112,7 @@ def new_booking():
         if conflicts:
             flash("This room is already booked for the selected time", "error")
             rooms = Room.query.all()
-            rooms_sorted = sorter(
+            rooms_sorted = quicksort(
                 rooms,
                 key_func=lambda room: (room.roomname,),
             )
@@ -136,7 +136,7 @@ def new_booking():
             return render_template("bookings/new.html", user=user, rooms=rooms)
 
     rooms = Room.query.all()
-    rooms_sorted = sorter(
+    rooms_sorted = quicksort(
         rooms,
         key_func=lambda room: (room.roomname,),
     )

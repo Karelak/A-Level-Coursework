@@ -12,7 +12,7 @@ def get_current_user():
     return None
 
 
-def sorter(items, key_func):
+def quicksort(items, key_func):
     if len(items) <= 1:
         return items
 
@@ -21,4 +21,4 @@ def sorter(items, key_func):
     middle = [item for item in items if key_func(item) == key_func(pivot)]
     right = [item for item in items if key_func(item) > key_func(pivot)]
 
-    return sorter(left, key_func) + middle + sorter(right, key_func)
+    return quicksort(left, key_func) + middle + quicksort(right, key_func)

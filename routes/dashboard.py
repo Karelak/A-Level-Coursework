@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash
 from utils.models import User, Booking, Room, SupportTicket
-from utils.helpers import is_logged_in, get_current_user, sorter
+from utils.helpers import is_logged_in, get_current_user, quicksort
 
 dashboard_bp = Blueprint("dashboard", __name__)
 
@@ -19,7 +19,7 @@ def dashboard():
 
     user = get_current_user()
     bookings = Booking.query.filter_by(userid=user.userid).all()
-    bookings_sorted = sorter(
+    bookings_sorted = quicksort(
         bookings,
         key_func=lambda booking: (
             booking.room.roomname if booking.room is not None else "",
@@ -42,7 +42,7 @@ def admin_dashboard():
     all_rooms = Room.query.all()
     tickets = SupportTicket.query.all()
 
-    bookings_sorted = sorter(
+    bookings_sorted = quicksort(
         all_bookings,
         key_func=lambda booking: (
             booking.room.roomname if booking.room is not None else "",
@@ -50,17 +50,17 @@ def admin_dashboard():
         ),
     )
 
-    users_sorted = sorter(
+    users_sorted = quicksort(
         all_users,
         key_func=lambda user: (user.fname, user.lname),
     )
 
-    rooms_sorted = sorter(
+    rooms_sorted = quicksort(
         all_rooms,
         key_func=lambda room: (room.floor, room.roomname),
     )
 
-    tickets_sorted = sorter(
+    tickets_sorted = quicksort(
         tickets,
         key_func=lambda ticket: ticket.created_at,
     )

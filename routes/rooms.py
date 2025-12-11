@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from utils.models import db, Room, Booking
-from utils.helpers import is_logged_in, get_current_user, sorter
+from utils.helpers import is_logged_in, get_current_user, quicksort
 
 rooms_bp = Blueprint("rooms", __name__)
 
@@ -12,7 +12,9 @@ def rooms():
 
     user = get_current_user()
     all_rooms = Room.query.all()
-    sorted_rooms = sorter(all_rooms, key_func=lambda room: (room.floor, room.roomname))
+    sorted_rooms = quicksort(
+        all_rooms, key_func=lambda room: (room.floor, room.roomname)
+    )
     return render_template("rooms/list.html", user=user, rooms=sorted_rooms)
 
 
