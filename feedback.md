@@ -1,0 +1,19 @@
+- Are the support tickets linked to the user, what happens if the user is deleted?
+- Use verification on set up and deleting.
+- Filter meetings booked by a user.
+- Can users change their account details?
+- Will there be internal notifications to handle complaints?
+- Layout – can you fix the input boxes so they are in a line.
+- Can you put a date in the past for room bookings?
+- Can you book a room overnight?
+- Can people continuously book rooms.
+- Change limits of room bookings to 30 mins?
+- Is there a map of rooms?
+- Can you see when rooms are free?
+- Do you have types of rooms?
+  - Sizes
+  - Conference etc.
+- Can you resize the message box in the support notes?
+- Can you have separate tabs in Admin rather than scrolling down.
+- Can you use 2FA for users’ password via email.
+- What happens if you delete all users?
