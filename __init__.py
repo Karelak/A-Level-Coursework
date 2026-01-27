@@ -2,6 +2,7 @@ from flask import Flask
 from utils.models import db
 from datetime import datetime
 from flask_mailjet import Mailjet
+from flask_wtf.csrf import CSRFProtect
 
 # Import blueprints
 from routes.auth import auth_bp
@@ -16,6 +17,7 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 mailjet = Mailjet()
 migrate = Migrate(app, db)
+csrf = CSRFProtect()
 
 
 # filters
@@ -44,6 +46,7 @@ def create_app():
     db.init_app(app)
     mailjet.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
     return app
 
 

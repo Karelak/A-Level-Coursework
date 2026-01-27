@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block title %}Two-Factor Authentication - Meeting
+Room Booking System{% endblock %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4">Two-Factor Authentication</h2>
+      <h3 class="text-muted mb-4">Enter your OTP code</h3>
+      <form method="POST" action="{{ url_for('auth.verify_2fa') }}">
+        <div class="form-group">
+          <label for="otp" class="form-label">OTP Code:</label>
+          <input
+            type="text"
+            id="otp"
+            name="otp"
+            class="form-control"
+            placeholder="Enter 6-digit code"
+            maxlength="6"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary w-100">Verify</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

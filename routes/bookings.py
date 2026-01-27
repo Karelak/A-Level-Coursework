@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from utils.models import db, Room, Booking
 from datetime import datetime
 from utils.helpers import is_logged_in, get_current_user, quicksort
+from forms import BookingForm
 
 bookings_bp = Blueprint("bookings", __name__)
 
@@ -30,100 +31,43 @@ def new_booking():
         return redirect(url_for("auth.login"))
 
     user = get_current_user()
+    form = BookingForm()
 
-    if request.method == "POST":
-        roomid = request.form.get("roomid")
-        timebegin = request.form.get("timebegin")
-        timefinish = request.form.get("timefinish")
+    # Populate room choices
+    rooms = Room.query.all()
+    rooms_sorted = quicksort(
+        rooms,
+        key_func=lambda room: (room.roomname,),
+    )
+    form.roomid.choices = [
+        (room.roomid, f"{room.roomname} (Floor {room.floor})") for room in rooms_sorted
+    ]
 
-        # Validate all fields are provided
-        if not all([roomid, timebegin, timefinish]):
-            flash("All fields are required", "error")
-            rooms = Room.query.all()
-            rooms_sorted = quicksort(
-                rooms,
-                key_func=lambda room: (room.roomname,),
-            )
-            return render_template("bookings/new.html", user=user, rooms=rooms_sorted)
-
-        # Validate room exists
-        room = Room.query.get(roomid)
-        if not room:
-            flash("Invalid room selected", "error")
-            rooms = Room.query.all()
-            rooms_sorted = quicksort(
-                rooms,
-                key_func=lambda room: (room.roomname,),
-            )
-            return render_template("bookings/new.html", user=user, rooms=rooms_sorted)
-
-        # Validate datetime format and parse
+    if form.validate_on_submit():
+        # Validate booking duration (custom validation)
         try:
-            begin_dt = datetime.fromisoformat(timebegin)
-            finish_dt = datetime.fromisoformat(timefinish)
-        except ValueError:
-            flash("Invalid date/time format", "error")
-            rooms = Room.query.all()
-            rooms_sorted = quicksort(
-                rooms,
-                key_func=lambda room: (room.roomname,),
-            )
-            return render_template("bookings/new.html", user=user, rooms=rooms_sorted)
-
-        # Validate finish time is after begin time
-        if finish_dt <= begin_dt:
-            flash("End time must be after start time", "error")
-            rooms = Room.query.all()
-            rooms_sorted = quicksort(
-                rooms,
-                key_func=lambda room: (room.roomname,),
-            )
-            return render_template("bookings/new.html", user=user, rooms=rooms_sorted)
-
-        # Validate booking is not in the past
-        if begin_dt < datetime.now():
-            flash("Cannot create bookings in the past", "error")
-            rooms = Room.query.all()
-            rooms_sorted = quicksort(
-                rooms,
-                key_func=lambda room: (room.roomname,),
-            )
-            return render_template("bookings/new.html", user=user, rooms=rooms_sorted)
-
-        # Validate booking duration (going with with 8 hrs since nobody doing a )
-        duration = finish_dt - begin_dt
-        duration_hours = duration.total_seconds() / 3600
-        if duration_hours > 8:
-            flash("Booking duration cannot exceed 8 hours", "error")
-            rooms = Room.query.all()
-            rooms_sorted = quicksort(
-                rooms,
-                key_func=lambda room: (room.roomname,),
-            )
-            return render_template("bookings/new.html", user=user, rooms=rooms_sorted)
+            form.validate_duration()
+        except Exception as e:
+            flash(str(e), "error")
+            return render_template("bookings/new.html", user=user, form=form)
 
         # Check for conflicts
         conflicts = Booking.query.filter(
-            Booking.roomid == roomid,
-            Booking.timebegin < timefinish,
-            Booking.timefinish > timebegin,
+            Booking.roomid == form.roomid.data,
+            Booking.timebegin < form.timefinish.data,
+            Booking.timefinish > form.timebegin.data,
         ).first()
 
         if conflicts:
             flash("This room is already booked for the selected time", "error")
-            rooms = Room.query.all()
-            rooms_sorted = quicksort(
-                rooms,
-                key_func=lambda room: (room.roomname,),
-            )
-            return render_template("bookings/new.html", user=user, rooms=rooms_sorted)
+            return render_template("bookings/new.html", user=user, form=form)
 
         try:
             booking = Booking(
                 userid=user.userid,
-                roomid=roomid,
-                timebegin=timebegin,
-                timefinish=timefinish,
+                roomid=form.roomid.data,
+                timebegin=form.timebegin.data.isoformat(),
+                timefinish=form.timefinish.data.isoformat(),
             )
             db.session.add(booking)
             db.session.commit()
@@ -132,15 +76,9 @@ def new_booking():
         except Exception as e:
             db.session.rollback()
             flash(f"Error creating booking: {str(e)}", "error")
-            rooms = Room.query.all()
-            return render_template("bookings/new.html", user=user, rooms=rooms)
+            return render_template("bookings/new.html", user=user, form=form)
 
-    rooms = Room.query.all()
-    rooms_sorted = quicksort(
-        rooms,
-        key_func=lambda room: (room.roomname,),
-    )
-    return render_template("bookings/new.html", user=user, rooms=rooms_sorted)
+    return render_template("bookings/new.html", user=user, form=form)
 
 
 @bookings_bp.route("/bookings/<int:booking_id>/cancel", methods=["POST"])
