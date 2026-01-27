@@ -1,8 +1,7 @@
 from flask import Flask
-from utils.models import db, User
-import os
+from utils.models import db
 from datetime import datetime
-
+from flask_mailjet import Mailjet
 
 # Import blueprints
 from routes.auth import auth_bp
@@ -11,13 +10,12 @@ from routes.rooms import rooms_bp
 from routes.bookings import bookings_bp
 from routes.support import support_bp
 from routes.admin import admin_bp
+from config import Config
+from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///meeting_rooms.db"
-app.config["SECRET_KEY"] = os.urandom(32)
-
-
-db.init_app(app)
+mailjet = Mailjet()
+migrate = Migrate(app, db)
 
 
 # filters
@@ -41,23 +39,14 @@ app.register_blueprint(support_bp)
 app.register_blueprint(admin_bp)
 
 
-def init_db():
-    with app.app_context():
-        db.create_all()
-        # Create admin account if no users exist
-        if User.query.count() == 0:
-            admin_user = User(
-                fname="Admin",
-                lname="User",
-                email="admin@caa.co.uk",
-                password="admin123",
-                role="admin",
-            )
-            db.session.add(admin_user)
-            db.session.commit()
-            print("Database initialised with starter admin account")
+def create_app():
+    app.config.from_object(Config)
+    db.init_app(app)
+    mailjet.init_app(app)
+    migrate.init_app(app, db)
+    return app
 
 
 if __name__ == "__main__":
-    init_db()
-    app.run(debug=True, port=8000)
+    app = create_app()
+    app.run(debug=True)

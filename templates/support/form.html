@@ -47,6 +47,8 @@ System{% endblock %} {% block content %}
     {% endfor %}
   </tbody>
 </table>
-{% else %}
-<p>You have not submitted any support tickets.</p>
-{% endif %} {% endblock %}
+  {% else %}
+  <p class="alert alert-info">You have not submitted any support tickets.</p>
+  {% endif %}
+</div>
+{% endblock %}

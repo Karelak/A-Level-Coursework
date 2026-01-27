@@ -19,12 +19,9 @@ Booking System{% endblock %} {% block content %}
     <td>{{ room.roomid }}</td>
   </tr>
 </table>
-
-<hr />
-
-<h3>Current Bookings</h3>
+<h3 class="mt-4 mb-3">Current Bookings</h3>
 {% if bookings %}
-<table border="1">
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Booking ID</th>

@@ -21,19 +21,15 @@ endblock %} {% block content %}
       <td>{{ room.roomname }}</td>
       <td>{{ room.floor }}</td>
       <td>
-        <a href="{{ url_for('rooms.room_detail', room_id=room.roomid) }}"
-          >View Details</a
-        >
+        <a href="{{ url_for('rooms.room_detail', room_id=room.roomid) }}" class="btn btn-sm btn-info">View Details</a>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-{% else %}
-<p>No rooms available.</p>
-{% endif %}
-
-<hr />
-
-<p><a href="{{ url_for('bookings.new_booking') }}">Create New Booking</a></p>
+  {% else %}
+  <p class="alert alert-warning">No rooms available.</p>
+  {% endif %}
+  <p class="mt-3"><a href="{{ url_for('bookings.new_booking') }}" class="btn btn-primary">Create New Booking</a></p>
+</div>
 {% endblock %}
