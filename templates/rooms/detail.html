@@ -1,50 +1,80 @@
 {% extends "base.html" %} {% block title %}{{ room.roomname }} - Meeting Room
 Booking System{% endblock %} {% block content %}
-<h2>{{ room.roomname }}</h2>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('rooms.rooms') }}">Rooms</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      {{ room.roomname }}
+    </li>
+  </ol>
+</nav>
 
-<hr />
+<h2 class="mb-4">{{ room.roomname }}</h2>
 
-<h3>Room Details</h3>
-<table border="1">
-  <tr>
-    <th>Room Name</th>
-    <td>{{ room.roomname }}</td>
-  </tr>
-  <tr>
-    <th>Floor</th>
-    <td>{{ room.floor }}</td>
-  </tr>
-  <tr>
-    <th>Room ID</th>
-    <td>{{ room.roomid }}</td>
-  </tr>
-</table>
-<h3 class="mt-4 mb-3">Current Bookings</h3>
-{% if bookings %}
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Booking ID</th>
-      <th>User</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for booking in bookings %}
-    <tr>
-      <td>{{ booking.bookingid }}</td>
-      <td>{{ booking.user.fname }} {{ booking.user.lname }}</td>
-      <td>{{ booking.timebegin | iso_to_dmy_hm }}</td>
-      <td>{{ booking.timefinish | iso_to_dmy_hm }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<p>No current bookings for this room.</p>
-{% endif %}
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Room Details</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4">
+        <strong>Room Name:</strong>
+        <p>{{ room.roomname }}</p>
+      </div>
+      <div class="col-md-4">
+        <strong>Floor:</strong>
+        <p>{{ room.floor }}</p>
+      </div>
+      <div class="col-md-4">
+        <strong>Room ID:</strong>
+        <p>{{ room.roomid }}</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-<hr />
-<p><a href="{{ url_for('rooms.rooms') }}">Back to Rooms List</a></p>
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-0">Current Bookings</h5>
+  </div>
+  <div class="card-body">
+    {% if bookings %}
+    <div class="table-responsive">
+      <table class="table table-striped mb-0">
+        <thead class="thead-light">
+          <tr>
+            <th>Booking ID</th>
+            <th>User</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+          <tr>
+            <td>{{ booking.bookingid }}</td>
+            <td>{{ booking.user.fname }} {{ booking.user.lname }}</td>
+            <td>{{ booking.timebegin | iso_to_dmy_hm }}</td>
+            <td>{{ booking.timefinish | iso_to_dmy_hm }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted mb-0">No current bookings for this room.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="mt-3">
+  <a href="{{ url_for('rooms.rooms') }}" class="btn btn-secondary"
+    >Back to Rooms List</a
+  >
+  <a href="{{ url_for('bookings.new_booking') }}" class="btn btn-primary"
+    >Book This Room</a
+  >
+</div>
 {% endblock %}

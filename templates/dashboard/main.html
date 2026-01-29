@@ -1,4 +1,27 @@
 {% extends "base.html" %} {% block title %}Dashboard - Meeting Room Booking
 System{% endblock %} {% block content %}
-<h2>Welcome, {{ user.fname }} {{ user.lname }}</h2>
+<div class="jumbotron bg-light">
+  <h1 class="display-4">Welcome, {{ user.fname }} {{ user.lname }}!</h1>
+  <p class="lead">Manage your meeting room bookings efficiently.</p>
+  <hr class="my-4" />
+  <p class="mb-3">Quick actions:</p>
+  <a
+    class="btn btn-primary btn-lg mr-2"
+    href="{{ url_for('bookings.new_booking') }}"
+    role="button"
+    >New Booking</a
+  >
+  <a
+    class="btn btn-outline-secondary btn-lg mr-2"
+    href="{{ url_for('bookings.bookings') }}"
+    role="button"
+    >My Bookings</a
+  >
+  <a
+    class="btn btn-outline-secondary btn-lg"
+    href="{{ url_for('rooms.rooms') }}"
+    role="button"
+    >Browse Rooms</a
+  >
+</div>
 {% endblock %}

@@ -1,49 +1,66 @@
 {% extends "base.html" %} {% block title %}My Bookings - Meeting Room Booking
 System{% endblock %} {% block content %}
-<h2>My Bookings</h2>
-
-<hr />
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>My Bookings</h2>
+  <a href="{{ url_for('bookings.new_booking') }}" class="btn btn-primary"
+    >Create New Booking</a
+  >
+</div>
 
 {% if bookings %}
-<table border="1">
-  <thead>
-    <tr>
-      <th>Booking ID</th>
-      <th>Room</th>
-      <th>Floor</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for booking in bookings %}
-    <tr>
-      <td>{{ booking.bookingid }}</td>
-      <td>{{ booking.room.roomname }}</td>
-      <td>{{ booking.room.floor }}</td>
-      <td>{{ booking.timebegin | iso_to_dmy_hm }}</td>
-      <td>{{ booking.timefinish | iso_to_dmy_hm }}</td>
-      <td>
-        <form
-          method="POST"
-          action="{{ url_for('bookings.cancel_booking', booking_id=booking.bookingid) }}"
-          style="display: inline"
-        >
-          <button
-            type="submit"
-            onclick="return confirm('Are you sure you want to cancel this booking?')"
-          >
-            Cancel
-          </button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-  {% else %}
-  <p class="alert alert-info">You have no bookings.</p>
-  {% endif %}
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover mb-0">
+        <thead class="thead-light">
+          <tr>
+            <th>Booking ID</th>
+            <th>Room</th>
+            <th>Floor</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+          <tr>
+            <td>{{ booking.bookingid }}</td>
+            <td>{{ booking.room.roomname }}</td>
+            <td>Floor {{ booking.room.floor }}</td>
+            <td>{{ booking.timebegin | iso_to_dmy_hm }}</td>
+            <td>{{ booking.timefinish | iso_to_dmy_hm }}</td>
+            <td>
+              <form
+                method="POST"
+                action="{{ url_for('bookings.cancel_booking', booking_id=booking.bookingid) }}"
+                class="d-inline"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-sm btn-danger"
+                  onclick="
+                    return confirm(
+                      'Are you sure you want to cancel this booking?',
+                    );
+                  "
+                >
+                  Cancel
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-{% endblock %}
+{% else %}
+<div class="alert alert-info" role="alert">
+  You have no bookings.
+  <a href="{{ url_for('bookings.new_booking') }}" class="alert-link"
+    >Create your first booking</a
+  >.
+</div>
+{% endif %} {% endblock %}

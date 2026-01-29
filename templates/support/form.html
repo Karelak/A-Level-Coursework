@@ -1,64 +1,98 @@
 {% extends "base.html" %} {% block title %}Support - Meeting Room Booking
 System{% endblock %} {% block content %}
-<div class="container mt-4">
-  <h2 class="mb-4">Support & Help</h2>
-  <h3 class="mb-4">Submit a Support Ticket</h3>
-  <div class="row">
-    <div class="col-md-6">
-      <form method="POST" action="{{ url_for('support.support') }}">
-        {{ form.hidden_tag() }}
-        <div class="form-group mb-3">
-          {{ form.subject.label(class="form-label") }} {{
-          form.subject(class="form-control", id="subject") }} {% if
-          form.subject.errors %}
-          <div class="text-danger">
-            {% for error in form.subject.errors %}
-            <small>{{ error }}</small>
-            {% endfor %}
+<h2 class="mb-4">Support & Help</h2>
+
+<div class="row">
+  <div class="col-lg-6 mb-4">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Submit a Support Ticket</h5>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('support.support') }}">
+          {{ form.hidden_tag() }}
+          <div class="form-group mb-3">
+            {{ form.subject.label(class="form-label") }} {{
+            form.subject(class="form-control", id="subject") }} {% if
+            form.subject.errors %}
+            <div class="text-danger">
+              {% for error in form.subject.errors %}
+              <small>{{ error }}</small>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
-          {% endif %}
-        </div>
-        <div class="form-group mb-3">
-          {{ form.message.label(class="form-label") }} {{
-          form.message(class="form-control", rows="5", id="message") }} {% if
-          form.message.errors %}
-          <div class="text-danger">
-            {% for error in form.message.errors %}
-            <small>{{ error }}</small>
-            {% endfor %}
+          <div class="form-group mb-3">
+            {{ form.message.label(class="form-label") }} {{
+            form.message(class="form-control", rows="5", id="message") }} {% if
+            form.message.errors %}
+            <div class="text-danger">
+              {% for error in form.message.errors %}
+              <small>{{ error }}</small>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
-          {% endif %}
-        </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Submit Ticket</button>
-        </div>
-      </form>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit Ticket</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-  <h3 class="mt-5 mb-4">Your Support Tickets</h3>
-  {% if tickets %}
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Ticket ID</th>
-        <th>Subject</th>
-        <th>Message</th>
-        <th>Submitted At</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for ticket in tickets %}
-      <tr>
-        <td>{{ ticket.ticketid }}</td>
-        <td>{{ ticket.subject }}</td>
-        <td>{{ ticket.message }}</td>
-        <td>{{ ticket.created_at | iso_to_dmy_hm }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-  <p class="alert alert-info">You have not submitted any support tickets.</p>
-  {% endif %}
+
+  <div class="col-lg-6 mb-4">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h5 class="card-title">Need Help?</h5>
+        <p class="card-text">
+          Our support team is here to assist you with any questions or issues
+          you may encounter.
+        </p>
+        <hr />
+        <h6>Common Issues:</h6>
+        <ul>
+          <li>Booking conflicts</li>
+          <li>Account access problems</li>
+          <li>Room availability questions</li>
+          <li>Technical difficulties</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-0">Your Support Tickets</h5>
+  </div>
+  <div class="card-body">
+    {% if tickets %}
+    <div class="table-responsive">
+      <table class="table table-striped mb-0">
+        <thead class="thead-light">
+          <tr>
+            <th>Ticket ID</th>
+            <th>Subject</th>
+            <th>Message</th>
+            <th>Submitted At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ticket in tickets %}
+          <tr>
+            <td>{{ ticket.ticketid }}</td>
+            <td>{{ ticket.subject }}</td>
+            <td>{{ ticket.message }}</td>
+            <td>{{ ticket.created_at | iso_to_dmy_hm }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted mb-0">You have not submitted any support tickets.</p>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
