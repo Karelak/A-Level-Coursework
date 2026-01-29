@@ -13,4 +13,4 @@ class Config:
     )
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
     WTF_CSRF_ENABLED = True
-    WTF_CSRF_TIME_LIMIT = None  # No time limit for CSRF tokens
+    WTF_CSRF_TIME_LIMIT = None

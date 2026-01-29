@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash
-from utils.models import User, Booking, Room, SupportTicket
+from models import User, Booking, Room, SupportTicket
 from utils.helpers import is_logged_in, get_current_user, quicksort
 
 dashboard_bp = Blueprint("dashboard", __name__)

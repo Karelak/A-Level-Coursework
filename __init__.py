@@ -1,5 +1,5 @@
 from flask import Flask
-from utils.models import db
+from models import db
 from datetime import datetime
 from flask_mailjet import Mailjet
 from flask_wtf.csrf import CSRFProtect
