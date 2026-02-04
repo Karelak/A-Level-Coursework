@@ -11,6 +11,6 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "SQLALCHEMY_DATABASE_URI", "sqlite:///meeting_rooms.db"
     )
-    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
+    SECRET_KEY = os.getenv("SECRET_KEY", os.urandom(24))
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = None
