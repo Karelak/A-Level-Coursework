@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from models import db, Room, Booking
 from utils.helpers import is_logged_in, get_current_user, quicksort
-from forms import BookingForm
+from forms import BookingForm, SearchSortForm
 
 bookings_bp = Blueprint("bookings", __name__)
 
@@ -12,16 +12,56 @@ def bookings():
         return redirect(url_for("auth.login"))
 
     user = get_current_user()
-    user_bookings = Booking.query.filter_by(userid=user.userid).all()
-    sorted_bookings = quicksort(
-        user_bookings,
-        key_func=lambda booking: (
-            booking.room.roomname if booking.room is not None else "",
-            booking.timebegin,
-        ),
-    )
+    form = SearchSortForm()
+    form.sort.choices = [
+        ("room_date", "Room, Date"),
+        ("date", "Date"),
+        ("room", "Room"),
+    ]
 
-    return render_template("bookings/list.html", user=user, bookings=sorted_bookings)
+    user_bookings = Booking.query.filter_by(userid=user.userid).all()
+
+    # Handle search
+    search_query = request.args.get("search", "").strip()
+    if search_query:
+        user_bookings = [
+            b
+            for b in user_bookings
+            if search_query.lower() in (b.room.roomname if b.room else "").lower()
+        ]
+
+    # Handle sort
+    sort_by = request.args.get("sort", "room_date")
+    if sort_by == "room_date":
+        sorted_bookings = quicksort(
+            user_bookings,
+            key_func=lambda booking: (
+                booking.room.roomname if booking.room is not None else "",
+                booking.timebegin,
+            ),
+        )
+    elif sort_by == "date":
+        sorted_bookings = quicksort(
+            user_bookings, key_func=lambda booking: (booking.timebegin,)
+        )
+    elif sort_by == "room":
+        sorted_bookings = quicksort(
+            user_bookings,
+            key_func=lambda booking: (
+                booking.room.roomname if booking.room is not None else "",
+            ),
+        )
+    else:
+        sorted_bookings = user_bookings
+
+    return render_template(
+        "bookings/list.html",
+        user=user,
+        bookings=sorted_bookings,
+        form=form,
+        current_search=search_query,
+        current_sort=sort_by,
+    )
 
 
 @bookings_bp.route("/bookings/new", methods=["GET", "POST"])

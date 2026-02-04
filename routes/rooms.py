@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from models import db, Room, Booking
 from utils.helpers import is_logged_in, get_current_user, quicksort
+from forms import SearchSortForm
 
 rooms_bp = Blueprint("rooms", __name__)
 
@@ -11,11 +12,41 @@ def rooms():
         return redirect(url_for("auth.login"))
 
     user = get_current_user()
+    form = SearchSortForm()
+    form.sort.choices = [
+        ("floor_name", "Floor, Room Name"),
+        ("name", "Room Name"),
+        ("floor", "Floor"),
+    ]
+
     all_rooms = Room.query.all()
-    sorted_rooms = quicksort(
-        all_rooms, key_func=lambda room: (room.floor, room.roomname)
+
+    # Handle search
+    search_query = request.args.get("search", "").strip()
+    if search_query:
+        all_rooms = [r for r in all_rooms if search_query.lower() in r.roomname.lower()]
+
+    # Handle sort
+    sort_by = request.args.get("sort", "floor_name")
+    if sort_by == "floor_name":
+        sorted_rooms = quicksort(
+            all_rooms, key_func=lambda room: (room.floor, room.roomname)
+        )
+    elif sort_by == "name":
+        sorted_rooms = quicksort(all_rooms, key_func=lambda room: (room.roomname,))
+    elif sort_by == "floor":
+        sorted_rooms = quicksort(all_rooms, key_func=lambda room: (room.floor,))
+    else:
+        sorted_rooms = all_rooms
+
+    return render_template(
+        "rooms/list.html",
+        user=user,
+        rooms=sorted_rooms,
+        form=form,
+        current_search=search_query,
+        current_sort=sort_by,
     )
-    return render_template("rooms/list.html", user=user, rooms=sorted_rooms)
 
 
 @rooms_bp.route("/rooms/<int:room_id>")

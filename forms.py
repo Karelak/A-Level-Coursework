@@ -6,8 +6,21 @@ from wtforms import (
     DateTimeLocalField,
     TextAreaField,
 )
-from wtforms.validators import DataRequired, Email, ValidationError
+from wtforms.validators import DataRequired, Email, ValidationError, Optional
 from datetime import datetime
+
+
+class SearchSortForm(FlaskForm):
+    search = StringField(
+        "Search",
+        validators=[Optional()],
+        render_kw={"placeholder": "Search..."},
+    )
+    sort = SelectField(
+        "Sort By",
+        validators=[Optional()],
+        choices=[],
+    )
 
 
 class LoginForm(FlaskForm):

@@ -8,6 +8,68 @@ System{% endblock %} {% block content %}
 </div>
 
 {% if bookings %}
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="GET" class="row g-3 align-items-end">
+      <div class="col-md-6">
+        <label for="search" class="form-label">Search by Room Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="search"
+          name="search"
+          value="{{ current_search }}"
+          placeholder="Search..."
+        />
+      </div>
+      <div class="col-md-4">
+        <label for="sort" class="form-label">Sort By</label>
+        <select class="form-select" id="sort" name="sort">
+          <option
+            value="room_date"
+            {%
+            if
+            current_sort=""
+            ="room_date"
+            %}selected{%
+            endif
+            %}
+          >
+            Room, Date
+          </option>
+          <option
+            value="date"
+            {%
+            if
+            current_sort=""
+            ="date"
+            %}selected{%
+            endif
+            %}
+          >
+            Date
+          </option>
+          <option
+            value="room"
+            {%
+            if
+            current_sort=""
+            ="room"
+            %}selected{%
+            endif
+            %}
+          >
+            Room
+          </option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Apply</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="card">
   <div class="card-body">
     <div class="table-responsive">
