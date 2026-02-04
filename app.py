@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from datetime import datetime
 from models import db
 from flask_mailjet import Mailjet
@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
 from config import Config
 
+from utils.helpers import get_current_user
 
 # Initialize extensions (no app binding yet)
 mailjet = Mailjet()
@@ -38,9 +39,6 @@ def create_app():
     # Context processor to inject user into all templates
     @app.context_processor
     def inject_user():
-        from flask import session
-        from utils.helpers import get_current_user
-
         user = get_current_user() if "userid" in session else None
         return {"user": user}
 
