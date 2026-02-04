@@ -5,6 +5,8 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
+    __tablename__ = "users"
+
     userid = db.Column(
         db.Integer, primary_key=True, autoincrement=True, nullable=False, unique=True
     )
@@ -33,6 +35,8 @@ class User(db.Model):
 
 
 class Room(db.Model):
+    __tablename__ = "rooms"
+
     roomid = db.Column(
         db.Integer, primary_key=True, autoincrement=True, nullable=False, unique=True
     )
@@ -74,6 +78,8 @@ class Booking(db.Model):
 
 
 class SupportTicket(db.Model):
+    __tablename__ = "support_tickets"
+
     ticketid = db.Column(
         db.Integer, primary_key=True, autoincrement=True, nullable=False, unique=True
     )

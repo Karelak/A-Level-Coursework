@@ -7,6 +7,11 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+    # Check if any users exist - redirect to setup if not
+    user_count = User.query.count()
+    if user_count == 0:
+        return redirect(url_for("admin.setup"))
+
     form = LoginForm()
 
     if form.validate_on_submit():

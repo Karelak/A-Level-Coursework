@@ -1,8 +1,52 @@
-from flask import Blueprint, request, redirect, url_for, session, flash
+from flask import Blueprint, request, redirect, url_for, session, flash, render_template
 from models import db, User
 from utils.helpers import is_logged_in, get_current_user
 
 admin_bp = Blueprint("admin", __name__)
+
+
+@admin_bp.route("/setup", methods=["GET", "POST"])
+def setup():
+    # Check if any users exist
+    user_count = User.query.count()
+    if user_count > 0:
+        return redirect(url_for("auth.login"))
+
+    if request.method == "POST":
+        fname = request.form.get("fname", "").strip()
+        lname = request.form.get("lname", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+
+        # Check if all fields are provided
+        if not all([fname, lname, email, password]):
+            flash("All fields are required", "error")
+            return redirect(url_for("admin.setup"))
+
+        # Validate password length
+        if len(password) < 8:
+            flash("Password must be at least 8 characters long", "error")
+            return redirect(url_for("admin.setup"))
+
+        # Validate name lengths
+        if len(fname) < 2 or len(lname) < 2:
+            flash("First and last names must be at least 2 characters long", "error")
+            return redirect(url_for("admin.setup"))
+
+        try:
+            user = User(
+                fname=fname, lname=lname, email=email, password=password, role="admin"
+            )
+            db.session.add(user)
+            db.session.commit()
+            flash("Admin account created successfully. You can now login.", "success")
+            return redirect(url_for("auth.login"))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error creating admin account: {str(e)}", "error")
+            return redirect(url_for("admin.setup"))
+
+    return render_template("admin/setup.html")
 
 
 @admin_bp.route("/admin/users/new", methods=["POST"])
@@ -27,10 +71,11 @@ def admin_create_user():
         flash("Invalid role selected", "error")
         return redirect(url_for("dashboard.admin_dashboard"))
 
-    # Validate email domain
-    if not email.endswith("@caa.co.uk"):
-        flash("Email must be a valid @caa.co.uk address", "error")
-        return redirect(url_for("dashboard.admin_dashboard"))
+    """to have a valid email im gonna disable this domain check for now"""
+    # # Validate email domain
+    # if not email.endswith("@caa.co.uk"):
+    #     flash("Email must be a valid @caa.co.uk address", "error")
+    #     return redirect(url_for("dashboard.admin_dashboard"))
 
     # Validate password length
     if len(password) < 8:
