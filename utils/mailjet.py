@@ -16,7 +16,7 @@ def send_otp_email(recipient_email, otp_code, expiration_minutes=5):
         if not mailjet:
             raise Exception("Mailjet extension not initialized.")
         mailjet.send_email(
-            sender={"Email": sender_email},
+            sender={"Email": sender_email, "Name": "CAA Verification Code"},
             recipients=recipient_email,
             subject="Your Two-Factor Authentication Code",
             html=email_html,
@@ -42,7 +42,7 @@ def send_support_ticket_email(recipient_email, ticket_id, subject, description):
         if not mailjet:
             raise Exception("Mailjet extension not initialized.")
         mailjet.send_email(
-            sender={"Email": sender_email},
+            sender={"Email": sender_email, "Name": "CAA Support Team"},
             recipients=recipient_email,
             subject=f"Support Ticket #{ticket_id}",
             html=email_html,
@@ -71,7 +71,7 @@ def send_booking_confirmation_email(
         if not mailjet:
             raise Exception("Mailjet extension not initialized.")
         mailjet.send_email(
-            sender={"Email": sender_email},
+            sender={"Email": sender_email, "Name": "CAA Booking System"},
             recipients=recipient_email,
             subject=f"Booking Confirmation #{booking_id}",
             html=email_html,
@@ -97,7 +97,7 @@ def send_ticket_update_email(recipient_email, ticket_id, subject, conversation_c
         if not mailjet:
             raise Exception("Mailjet extension not initialized.")
         mailjet.send_email(
-            sender={"Email": sender_email},
+            sender={"Email": sender_email, "Name": "CAA Support Team"},
             recipients=recipient_email,
             subject=f"Support Ticket #{ticket_id} - New Reply",
             html=email_html,
