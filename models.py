@@ -98,6 +98,8 @@ class SupportTicket(db.Model):
     created_at = db.Column(
         db.Text, nullable=False, default=lambda: datetime.now().isoformat()
     )
+    replies = db.Column(db.Text, nullable=False, default="[]")
+    status = db.Column(db.Text, nullable=False, default="open")
 
     # Relationships
     user = db.relationship(

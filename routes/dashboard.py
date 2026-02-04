@@ -66,7 +66,7 @@ def admin_dashboard():
     )
 
     return render_template(
-        "dashboard/admin.html",
+        "admin/dashboard.html",
         user=user,
         bookings=bookings_sorted,
         users=users_sorted,

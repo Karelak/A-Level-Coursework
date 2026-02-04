@@ -265,6 +265,10 @@ Booking System{% endblock %} {% block content %}
           id="floor"
           name="floor"
           required
+          min="1"
+          step="1"
+          pattern="[1-9][0-9]*"
+          oninput="if (this.value && this.value < 1) this.value = '';"
         />
       </div>
       <div class="col-12">
@@ -279,28 +283,56 @@ Booking System{% endblock %} {% block content %}
     <h5 class="mb-0">Support Tickets</h5>
   </div>
   <div class="card-body">
-    {% if tickets %}
-    <div class="table-responsive">
-      <table class="table table-striped table-hover">
-        <thead class="thead-light">
-          <tr>
-            <th>Ticket ID</th>
-            <th>User</th>
-            <th>Subject</th>
-            <th>Message</th>
-            <th>Created At</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for ticket in tickets %}
-          <tr>
-            <td>{{ ticket.ticketid }}</td>
-            <td>{{ ticket.user.fname }} {{ ticket.user.lname }}</td>
-            <td>{{ ticket.subject }}</td>
-            <td>{{ ticket.message }}</td>
-            <td>{{ ticket.created_at | iso_to_dmy_hm }}</td>
-            <td>
+    {% if tickets %} {% for ticket in tickets %}
+    <div class="card mb-4">
+      <div
+        class="card-header {% if ticket.status == 'replied' %}bg-success{% else %}bg-warning{% endif %} text-white"
+      >
+        <div class="row align-items-center">
+          <div class="col">
+            <h6 class="mb-0">
+              Ticket #{{ ticket.ticketid }}: {{ ticket.subject }}
+            </h6>
+            <small
+              >From: {{ ticket.user.fname }} {{ ticket.user.lname }} ({{
+              ticket.user.email }})</small
+            >
+          </div>
+          <div class="col-auto">
+            <span class="badge badge-light">{{ ticket.status }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="mb-4">
+          <strong>Original Message:</strong>
+          <p class="text-muted mb-0">{{ ticket.message }}</p>
+          <small class="text-muted"
+            >{{ ticket.created_at | iso_to_dmy_hm }}</small
+          >
+        </div>
+
+        <div class="mt-4 pt-3 border-top">
+          <strong>Reply to Ticket:</strong>
+          <form
+            method="POST"
+            action="{{ url_for('support.reply_ticket', ticket_id=ticket.ticketid) }}"
+            class="mt-3"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="form-group mb-3">
+              <textarea
+                name="reply"
+                class="form-control"
+                rows="4"
+                placeholder="Type your reply here..."
+                required
+              ></textarea>
+            </div>
+            <div class="btn-group">
+              <button type="submit" class="btn btn-sm btn-primary">
+                Send Reply & Notify User
+              </button>
               <form
                 method="POST"
                 action="{{ url_for('support.delete_ticket', ticket_id=ticket.ticketid) }}"
@@ -320,16 +352,15 @@ Booking System{% endblock %} {% block content %}
                     );
                   "
                 >
-                  Delete
+                  Delete Ticket
                 </button>
               </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    {% else %}
+    {% endfor %} {% else %}
     <p class="text-muted">No support tickets in the system.</p>
     {% endif %}
   </div>

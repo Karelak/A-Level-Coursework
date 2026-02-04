@@ -78,3 +78,29 @@ def send_booking_confirmation_email(
         )
     except Exception as e:
         raise Exception(f"Failed to send booking confirmation email: {str(e)}")
+
+
+def send_ticket_update_email(recipient_email, ticket_id, subject, conversation_chain):
+    try:
+        sender_email = os.environ.get("MAILJET_DEFAULT_SENDER")
+    except KeyError:
+        print("MAILJET_DEFAULT_SENDER not set in environment variables.")
+
+    email_html = render_email_template(
+        "support_ticket_update.html",
+        ticket_id=ticket_id,
+        subject=subject,
+        conversation_chain=conversation_chain,
+    )
+    try:
+        mailjet = current_app.extensions.get("mailjet")
+        if not mailjet:
+            raise Exception("Mailjet extension not initialized.")
+        mailjet.send_email(
+            sender={"Email": sender_email},
+            recipients=recipient_email,
+            subject=f"Support Ticket #{ticket_id} - New Reply",
+            html=email_html,
+        )
+    except Exception as e:
+        raise Exception(f"Failed to send ticket update email: {str(e)}")

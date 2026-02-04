@@ -129,3 +129,9 @@ class AdminCreateRoomForm(FlaskForm):
         "Floor",
         validators=[DataRequired(message="Floor is required")],
     )
+
+
+class ReplyTicketForm(FlaskForm):
+    reply = TextAreaField(
+        "Reply", validators=[DataRequired(message="Reply message is required")]
+    )

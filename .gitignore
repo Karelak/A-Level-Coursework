@@ -1,6 +1,30 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,dotenv,flask,linux,node,python,windows
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,macos,dotenv,flask,linux,node,python,windows
+# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,python,node,macos,linux,flask,dotenv,data,database
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,python,node,macos,linux,flask,dotenv,data,database
+
+### Data ###
+*.csv
+*.dat
+*.efx
+*.gbr
+*.key
+*.pps
+*.ppt
+*.pptx
+*.sdf
+*.tax2010
+*.vcf
+*.xml
+
+### Database ###
+*.accdb
+*.db
+*.dbf
+*.mdb
+*.pdb
+*.sqlite3
+*.db-shm
+*.db-wal
 
 ### dotenv ###
 .env
@@ -192,8 +216,7 @@ cython_debug/
 .LSOverride
 
 # Icon must end with two \r
-Icon
-
+Icon
 
 # Thumbnails
 ._*
@@ -492,7 +515,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,dotenv,flask,linux,node,python,windows
+# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,python,node,macos,linux,flask,dotenv,data,database
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
