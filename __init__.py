@@ -35,6 +35,15 @@ def create_app():
         except ValueError:
             return value
 
+    # Context processor to inject user into all templates
+    @app.context_processor
+    def inject_user():
+        from flask import session
+        from utils.helpers import get_current_user
+
+        user = get_current_user() if "userid" in session else None
+        return {"user": user}
+
     # Register blueprints
     from routes.auth import auth_bp
     from routes.dashboard import dashboard_bp

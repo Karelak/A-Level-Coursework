@@ -1,6 +1,7 @@
 from flask import Blueprint, request, redirect, url_for, session, flash, render_template
 from models import db, User
 from utils.helpers import is_logged_in, get_current_user
+from forms import SetupForm
 
 admin_bp = Blueprint("admin", __name__)
 
@@ -12,25 +13,22 @@ def setup():
     if user_count > 0:
         return redirect(url_for("auth.login"))
 
-    if request.method == "POST":
-        fname = request.form.get("fname", "").strip()
-        lname = request.form.get("lname", "").strip()
-        email = request.form.get("email", "").strip().lower()
-        password = request.form.get("password", "")
+    form = SetupForm()
 
-        # Check if all fields are provided
-        if not all([fname, lname, email, password]):
-            flash("All fields are required", "error")
+    if form.validate_on_submit():
+        fname = form.fname.data.strip()
+        lname = form.lname.data.strip()
+        email = form.email.data.strip().lower()
+        password = form.password.data
+
+        # Validate name lengths
+        if len(fname) < 2 or len(lname) < 2:
+            flash("First and last names must be at least 2 characters long", "error")
             return redirect(url_for("admin.setup"))
 
         # Validate password length
         if len(password) < 8:
             flash("Password must be at least 8 characters long", "error")
-            return redirect(url_for("admin.setup"))
-
-        # Validate name lengths
-        if len(fname) < 2 or len(lname) < 2:
-            flash("First and last names must be at least 2 characters long", "error")
             return redirect(url_for("admin.setup"))
 
         try:
@@ -44,9 +42,8 @@ def setup():
         except Exception as e:
             db.session.rollback()
             flash(f"Error creating admin account: {str(e)}", "error")
-            return redirect(url_for("admin.setup"))
 
-    return render_template("admin/setup.html")
+    return render_template("admin/setup.html", form=form)
 
 
 @admin_bp.route("/admin/users/new", methods=["POST"])

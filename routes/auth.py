@@ -20,6 +20,7 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if user and user.password == password:
+            session.permanent = True
             session["userid"] = user.userid
             session["role"] = user.role
             flash("Login successful", "success")

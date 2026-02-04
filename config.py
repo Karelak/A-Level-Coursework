@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -14,3 +15,7 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", os.urandom(24))
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = None
+    PERMANENT_SESSION_LIFETIME = timedelta(days=7)
+    SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = "Lax"

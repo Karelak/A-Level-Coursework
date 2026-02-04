@@ -8,9 +8,31 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, ValidationError
 from datetime import datetime
+import email_validator
 
 
 class LoginForm(FlaskForm):
+    email = StringField(
+        "Email",
+        validators=[
+            DataRequired(message="Email is required"),
+            Email(message="Invalid email address"),
+        ],
+    )
+    password = PasswordField(
+        "Password", validators=[DataRequired(message="Password is required")]
+    )
+
+
+class SetupForm(FlaskForm):
+    fname = StringField(
+        "First Name",
+        validators=[DataRequired(message="First name is required")],
+    )
+    lname = StringField(
+        "Last Name",
+        validators=[DataRequired(message="Last name is required")],
+    )
     email = StringField(
         "Email",
         validators=[
