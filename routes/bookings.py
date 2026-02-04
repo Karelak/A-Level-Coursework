@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash
 from models import db, Room, Booking
-from datetime import datetime
 from utils.helpers import is_logged_in, get_current_user, quicksort
 from forms import BookingForm
 

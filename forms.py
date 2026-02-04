@@ -8,7 +8,6 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, ValidationError
 from datetime import datetime
-import email_validator
 
 
 class LoginForm(FlaskForm):
@@ -21,6 +20,13 @@ class LoginForm(FlaskForm):
     )
     password = PasswordField(
         "Password", validators=[DataRequired(message="Password is required")]
+    )
+
+
+class VerifyOTPForm(FlaskForm):
+    otp = StringField(
+        "OTP Code",
+        validators=[DataRequired(message="OTP code is required")],
     )
 
 

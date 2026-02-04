@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, session, flash, render_template
+from flask import Blueprint, redirect, url_for, session, flash, render_template
 from models import db, User
 from utils.helpers import is_logged_in, get_current_user
 from forms import SetupForm, AdminCreateUserForm, AdminCreateRoomForm
