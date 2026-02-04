@@ -69,7 +69,7 @@ System{% endblock %} {% block content %}
   </div>
 
   <div class="col-md-4">
-    <div class="card bg-light">
+    <div class="card bg-light mb-3">
       <div class="card-body">
         <h5 class="card-title">Booking Instructions</h5>
         <ul class="mb-0">
@@ -77,6 +77,25 @@ System{% endblock %} {% block content %}
           <li>Choose your start and end times</li>
           <li>The system will automatically check for conflicts</li>
           <li>You will receive a confirmation once the booking is created</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card bg-warning">
+      <div class="card-body">
+        <h5 class="card-title">Booking Limits</h5>
+        <ul class="mb-0">
+          <li><strong>Minimum Duration:</strong> 30 minutes per booking</li>
+          <li><strong>Maximum Duration:</strong> 8 hours per booking</li>
+          <li><strong>Future Only:</strong> Cannot book times in the past</li>
+          <li>
+            <strong>No Conflicts:</strong> Room must be available for your
+            chosen time
+          </li>
+          <li>
+            <strong>Start & End Times:</strong> End time must be after start
+            time
+          </li>
         </ul>
       </div>
     </div>

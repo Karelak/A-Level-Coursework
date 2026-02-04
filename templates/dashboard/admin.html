@@ -36,6 +36,11 @@ Booking System{% endblock %} {% block content %}
                 action="{{ url_for('bookings.cancel_booking', booking_id=booking.bookingid) }}"
                 class="d-inline"
               >
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
                 <button
                   type="submit"
                   class="btn btn-sm btn-danger"
@@ -95,6 +100,11 @@ Booking System{% endblock %} {% block content %}
                 action="{{ url_for('admin.delete_user', user_id=user.userid) }}"
                 class="d-inline"
               >
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
                 <button
                   type="submit"
                   class="btn btn-sm btn-danger"
@@ -124,6 +134,7 @@ Booking System{% endblock %} {% block content %}
       action="{{ url_for('admin.admin_create_user') }}"
       class="row g-3"
     >
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="col-md-6">
         <label for="fname" class="form-label">First Name</label>
         <input
@@ -235,6 +246,7 @@ Booking System{% endblock %} {% block content %}
       action="{{ url_for('rooms.admin_create_room') }}"
       class="row g-3"
     >
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="col-md-6">
         <label for="roomname" class="form-label">Room Name</label>
         <input
@@ -294,6 +306,11 @@ Booking System{% endblock %} {% block content %}
                 action="{{ url_for('support.delete_ticket', ticket_id=ticket.ticketid) }}"
                 class="d-inline"
               >
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
                 <button
                   type="submit"
                   class="btn btn-sm btn-danger"

@@ -72,9 +72,11 @@ class BookingForm(FlaskForm):
     def validate_duration(self):
         if self.timebegin.data and self.timefinish.data:
             duration = self.timefinish.data - self.timebegin.data
-            duration_hours = duration.total_seconds() / 3600
-            if duration_hours > 8:
+            duration_seconds = duration.total_seconds()
+            if duration_seconds > 8 * 3600:
                 raise ValidationError("Booking duration cannot exceed 8 hours")
+            if duration_seconds < 30 * 60:
+                raise ValidationError("Booking duration must be at least 30 minutes")
 
 
 class SupportTicketForm(FlaskForm):
@@ -83,4 +85,41 @@ class SupportTicketForm(FlaskForm):
     )
     message = TextAreaField(
         "Message", validators=[DataRequired(message="Message is required")]
+    )
+
+
+class AdminCreateUserForm(FlaskForm):
+    fname = StringField(
+        "First Name",
+        validators=[DataRequired(message="First name is required")],
+    )
+    lname = StringField(
+        "Last Name",
+        validators=[DataRequired(message="Last name is required")],
+    )
+    email = StringField(
+        "Email",
+        validators=[
+            DataRequired(message="Email is required"),
+            Email(message="Invalid email address"),
+        ],
+    )
+    password = PasswordField(
+        "Password", validators=[DataRequired(message="Password is required")]
+    )
+    role = SelectField(
+        "Role",
+        choices=[("user", "User"), ("admin", "Admin")],
+        validators=[DataRequired(message="Please select a role")],
+    )
+
+
+class AdminCreateRoomForm(FlaskForm):
+    roomname = StringField(
+        "Room Name",
+        validators=[DataRequired(message="Room name is required")],
+    )
+    floor = StringField(
+        "Floor",
+        validators=[DataRequired(message="Floor is required")],
     )

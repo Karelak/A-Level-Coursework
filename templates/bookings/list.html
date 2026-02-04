@@ -36,6 +36,11 @@ System{% endblock %} {% block content %}
                 action="{{ url_for('bookings.cancel_booking', booking_id=booking.bookingid) }}"
                 class="d-inline"
               >
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
                 <button
                   type="submit"
                   class="btn btn-sm btn-danger"
