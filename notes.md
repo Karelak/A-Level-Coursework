@@ -13,8 +13,8 @@ Feedback from prototype on commit ece5b6f251f4d88116b7c7f8a082741df6cac693
 - [ ] Is there a map of rooms?
 - [ ] Can you see when rooms are free?
 - [ ] Do you have types of rooms?
-  - [ ] Sizes
-  - [ ] Conference etc.
+    - [ ] Sizes
+    - [ ] Conference etc.
 - [ ] Can you resize the message box in the support notes?
 - [ ] Can you have separate tabs in Admin rather than scrolling down.
 - [x] Can you use 2FA for users' password via email.

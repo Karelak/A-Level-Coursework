@@ -1,104 +1,118 @@
 {% extends "base.html" %} {% block title %}New Booking - Meeting Room Booking
 System{% endblock %} {% block content %}
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item">
-      <a href="{{ url_for('bookings.bookings') }}">My Bookings</a>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page">New Booking</li>
-  </ol>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('bookings.bookings') }}">My Bookings</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">New Booking</li>
+    </ol>
 </nav>
 
 <h2 class="mb-4">Create New Booking</h2>
 
 <div class="row">
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-body">
-        <form method="POST" action="{{ url_for('bookings.new_booking') }}">
-          {{ form.hidden_tag() }}
-          <div class="form-group mb-3">
-            {{ form.roomid.label(class="form-label") }} {{
-            form.roomid(class="form-control", id="roomid") }} {% if
-            form.roomid.errors %}
-            <div class="text-danger">
-              {% for error in form.roomid.errors %}
-              <small>{{ error }}</small>
-              {% endfor %}
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form
+                    method="POST"
+                    action="{{ url_for('bookings.new_booking') }}"
+                >
+                    {{ form.hidden_tag() }}
+                    <div class="form-group mb-3">
+                        {{ form.roomid.label(class="form-label") }} {{
+                        form.roomid(class="form-control", id="roomid") }} {% if
+                        form.roomid.errors %}
+                        <div class="text-danger">
+                            {% for error in form.roomid.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.timebegin.label(class="form-label") }} {{
+                        form.timebegin(class="form-control", id="timebegin") }}
+                        {% if form.timebegin.errors %}
+                        <div class="text-danger">
+                            {% for error in form.timebegin.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.timefinish.label(class="form-label") }} {{
+                        form.timefinish(class="form-control", id="timefinish")
+                        }} {% if form.timefinish.errors %}
+                        <div class="text-danger">
+                            {% for error in form.timefinish.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            Create Booking
+                        </button>
+                        <a
+                            href="{{ url_for('bookings.bookings') }}"
+                            class="btn btn-secondary"
+                            >Cancel</a
+                        >
+                    </div>
+                </form>
             </div>
-            {% endif %}
-          </div>
-          <div class="form-group mb-3">
-            {{ form.timebegin.label(class="form-label") }} {{
-            form.timebegin(class="form-control", id="timebegin") }} {% if
-            form.timebegin.errors %}
-            <div class="text-danger">
-              {% for error in form.timebegin.errors %}
-              <small>{{ error }}</small>
-              {% endfor %}
-            </div>
-            {% endif %}
-          </div>
-          <div class="form-group mb-3">
-            {{ form.timefinish.label(class="form-label") }} {{
-            form.timefinish(class="form-control", id="timefinish") }} {% if
-            form.timefinish.errors %}
-            <div class="text-danger">
-              {% for error in form.timefinish.errors %}
-              <small>{{ error }}</small>
-              {% endfor %}
-            </div>
-            {% endif %}
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary">
-              Create Booking
-            </button>
-            <a
-              href="{{ url_for('bookings.bookings') }}"
-              class="btn btn-secondary"
-              >Cancel</a
-            >
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="card bg-light mb-3">
-      <div class="card-body">
-        <h5 class="card-title">Booking Instructions</h5>
-        <ul class="mb-0">
-          <li>Select a room from the dropdown list</li>
-          <li>Choose your start and end times</li>
-          <li>The system will automatically check for conflicts</li>
-          <li>You will receive a confirmation once the booking is created</li>
-        </ul>
-      </div>
+        </div>
     </div>
 
-    <div class="card bg-warning">
-      <div class="card-body">
-        <h5 class="card-title">Booking Limits</h5>
-        <ul class="mb-0">
-          <li><strong>Minimum Duration:</strong> 30 minutes per booking</li>
-          <li><strong>Maximum Duration:</strong> 8 hours per booking</li>
-          <li><strong>Future Only:</strong> Cannot book times in the past</li>
-          <li>
-            <strong>No Conflicts:</strong> Room must be available for your
-            chosen time
-          </li>
-          <li>
-            <strong>Start & End Times:</strong> End time must be after start
-            time
-          </li>
-        </ul>
-      </div>
+    <div class="col-md-4">
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Booking Instructions</h5>
+                <ul class="mb-0">
+                    <li>Select a room from the dropdown list</li>
+                    <li>Choose your start and end times</li>
+                    <li>The system will automatically check for conflicts</li>
+                    <li>
+                        You will receive a confirmation once the booking is
+                        created
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Booking Limits</h5>
+                <ul class="mb-0">
+                    <li>
+                        <strong>Minimum Duration:</strong> 30 minutes per
+                        booking
+                    </li>
+                    <li>
+                        <strong>Maximum Duration:</strong> 8 hours per booking
+                    </li>
+                    <li>
+                        <strong>Future Only:</strong> Cannot book times in the
+                        past
+                    </li>
+                    <li>
+                        <strong>No Conflicts:</strong> Room must be available
+                        for your chosen time
+                    </li>
+                    <li>
+                        <strong>Start & End Times:</strong> End time must be
+                        after start time
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}

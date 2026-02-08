@@ -1,15 +1,15 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Run Prettier and Ruff",
-      "type": "shell",
-      "command": "uvx ruff check --fix && bunx prettier . --write",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": []
-    }
-  ]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Prettier and Ruff",
+            "type": "shell",
+            "command": "uvx ruff check --fix && bunx prettier . --write",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
 }

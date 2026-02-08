@@ -1,39 +1,41 @@
 {% extends "base.html" %} {% block title %}Login - Meeting Room Booking System{%
 endblock %} {% block content %}
 <div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <h2 class="mb-4">Login</h2>
-      <h3 class="text-muted mb-4">Please enter your credentials</h3>
-      <form method="POST" action="{{ url_for('auth.login') }}">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-          {{ form.email.label(class="form-label") }} {{
-          form.email(class="form-control", id="email") }} {% if
-          form.email.errors %}
-          <div class="text-danger">
-            {% for error in form.email.errors %}
-            <small>{{ error }}</small>
-            {% endfor %}
-          </div>
-          {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Login</h2>
+            <h3 class="text-muted mb-4">Please enter your credentials</h3>
+            <form method="POST" action="{{ url_for('auth.login') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }} {{
+                    form.email(class="form-control", id="email") }} {% if
+                    form.email.errors %}
+                    <div class="text-danger">
+                        {% for error in form.email.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }} {{
+                    form.password(class="form-control", id="password") }} {% if
+                    form.password.errors %}
+                    <div class="text-danger">
+                        {% for error in form.password.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Login
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-          {{ form.password.label(class="form-label") }} {{
-          form.password(class="form-control", id="password") }} {% if
-          form.password.errors %}
-          <div class="text-danger">
-            {% for error in form.password.errors %}
-            <small>{{ error }}</small>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary w-100">Login</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
 {% endblock %}

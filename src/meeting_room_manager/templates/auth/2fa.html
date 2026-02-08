@@ -1,47 +1,53 @@
 {% extends "base.html" %} {% block title %}Two-Factor Authentication - Meeting
 Room Booking System{% endblock %} {% block content %}
 <div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-4">Two-Factor Authentication</h2>
-          <p class="text-center text-muted mb-4">
-            We've sent a code to <strong>{{ email }}</strong>
-          </p>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">
+                        Two-Factor Authentication
+                    </h2>
+                    <p class="text-center text-muted mb-4">
+                        We've sent a code to <strong>{{ email }}</strong>
+                    </p>
 
-          <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="form-group mb-3">
-              {{ form.otp.label(class="form-label") }} {{
-              form.otp(class="form-control", id="otp", placeholder="Enter
-              6-digit code") }} {% if form.otp.errors %}
-              <div class="text-danger mt-2">
-                {% for error in form.otp.errors %}
-                <small>{{ error }}</small>
-                {% endfor %}
-              </div>
-              {% endif %}
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group mb-3">
+                            {{ form.otp.label(class="form-label") }} {{
+                            form.otp(class="form-control", id="otp",
+                            placeholder="Enter 6-digit code") }} {% if
+                            form.otp.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.otp.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100 mb-3"
+                        >
+                            Verify
+                        </button>
+                    </form>
+
+                    <hr />
+
+                    <p class="text-muted text-center mb-0">
+                        <small
+                            >Didn't receive the code?
+                            <a href="{{ url_for('auth.login') }}"
+                                >Try logging in again</a
+                            ></small
+                        >
+                    </p>
+                </div>
             </div>
-
-            <button type="submit" class="btn btn-primary w-100 mb-3">
-              Verify
-            </button>
-          </form>
-
-          <hr />
-
-          <p class="text-muted text-center mb-0">
-            <small
-              >Didn't receive the code?
-              <a href="{{ url_for('auth.login') }}"
-                >Try logging in again</a
-              ></small
-            >
-          </p>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}

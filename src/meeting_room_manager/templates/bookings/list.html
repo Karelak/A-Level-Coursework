@@ -1,133 +1,137 @@
 {% extends "base.html" %} {% block title %}My Bookings - Meeting Room Booking
 System{% endblock %} {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-  <h2>My Bookings</h2>
-  <a href="{{ url_for('bookings.new_booking') }}" class="btn btn-primary"
-    >Create New Booking</a
-  >
+    <h2>My Bookings</h2>
+    <a href="{{ url_for('bookings.new_booking') }}" class="btn btn-primary"
+        >Create New Booking</a
+    >
 </div>
 
 {% if bookings %}
 <div class="card mb-4">
-  <div class="card-body">
-    <form method="GET" class="row g-3 align-items-end">
-      <div class="col-md-6">
-        <label for="search" class="form-label">Search by Room Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="search"
-          name="search"
-          value="{{ current_search }}"
-          placeholder="Search..."
-        />
-      </div>
-      <div class="col-md-4">
-        <label for="sort" class="form-label">Sort By</label>
-        <select class="form-select" id="sort" name="sort">
-          <option
-            value="room_date"
-            {%
-            if
-            current_sort=""
-            ="room_date"
-            %}selected{%
-            endif
-            %}
-          >
-            Room, Date
-          </option>
-          <option
-            value="date"
-            {%
-            if
-            current_sort=""
-            ="date"
-            %}selected{%
-            endif
-            %}
-          >
-            Date
-          </option>
-          <option
-            value="room"
-            {%
-            if
-            current_sort=""
-            ="room"
-            %}selected{%
-            endif
-            %}
-          >
-            Room
-          </option>
-        </select>
-      </div>
-      <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100">Apply</button>
-      </div>
-    </form>
-  </div>
+    <div class="card-body">
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label for="search" class="form-label"
+                    >Search by Room Name</label
+                >
+                <input
+                    type="text"
+                    class="form-control"
+                    id="search"
+                    name="search"
+                    value="{{ current_search }}"
+                    placeholder="Search..."
+                />
+            </div>
+            <div class="col-md-4">
+                <label for="sort" class="form-label">Sort By</label>
+                <select class="form-select" id="sort" name="sort">
+                    <option
+                        value="room_date"
+                        {%
+                        if
+                        current_sort=""
+                        ="room_date"
+                        %}selected{%
+                        endif
+                        %}
+                    >
+                        Room, Date
+                    </option>
+                    <option
+                        value="date"
+                        {%
+                        if
+                        current_sort=""
+                        ="date"
+                        %}selected{%
+                        endif
+                        %}
+                    >
+                        Date
+                    </option>
+                    <option
+                        value="room"
+                        {%
+                        if
+                        current_sort=""
+                        ="room"
+                        %}selected{%
+                        endif
+                        %}
+                    >
+                        Room
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    Apply
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="card">
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table table-striped table-hover mb-0">
-        <thead class="thead-light">
-          <tr>
-            <th>Booking ID</th>
-            <th>Room</th>
-            <th>Floor</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for booking in bookings %}
-          <tr>
-            <td>{{ booking.bookingid }}</td>
-            <td>{{ booking.room.roomname }}</td>
-            <td>Floor {{ booking.room.floor }}</td>
-            <td>{{ booking.timebegin | iso_to_dmy_hm }}</td>
-            <td>{{ booking.timefinish | iso_to_dmy_hm }}</td>
-            <td>
-              <form
-                method="POST"
-                action="{{ url_for('bookings.cancel_booking', booking_id=booking.bookingid) }}"
-                class="d-inline"
-              >
-                <input
-                  type="hidden"
-                  name="csrf_token"
-                  value="{{ csrf_token() }}"
-                />
-                <button
-                  type="submit"
-                  class="btn btn-sm btn-danger"
-                  onclick="
-                    return confirm(
-                      'Are you sure you want to cancel this booking?',
-                    );
-                  "
-                >
-                  Cancel
-                </button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Room</th>
+                        <th>Floor</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.bookingid }}</td>
+                        <td>{{ booking.room.roomname }}</td>
+                        <td>Floor {{ booking.room.floor }}</td>
+                        <td>{{ booking.timebegin | iso_to_dmy_hm }}</td>
+                        <td>{{ booking.timefinish | iso_to_dmy_hm }}</td>
+                        <td>
+                            <form
+                                method="POST"
+                                action="{{ url_for('bookings.cancel_booking', booking_id=booking.bookingid) }}"
+                                class="d-inline"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                />
+                                <button
+                                    type="submit"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="
+                                        return confirm(
+                                            'Are you sure you want to cancel this booking?',
+                                        );
+                                    "
+                                >
+                                    Cancel
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 </div>
 {% else %}
 <div class="alert alert-info" role="alert">
-  You have no bookings.
-  <a href="{{ url_for('bookings.new_booking') }}" class="alert-link"
-    >Create your first booking</a
-  >.
+    You have no bookings.
+    <a href="{{ url_for('bookings.new_booking') }}" class="alert-link"
+        >Create your first booking</a
+    >.
 </div>
 {% endif %} {% endblock %}
