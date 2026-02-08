@@ -1,5 +1,5 @@
 from flask import session
-from models import db, User
+from ..models import db, User
 
 
 def is_logged_in():

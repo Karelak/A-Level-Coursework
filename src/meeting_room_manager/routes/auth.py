@@ -6,10 +6,10 @@ from flask import (
     session,
     flash,
 )
-from models import User, db
-from forms import LoginForm, VerifyOTPForm
-from utils.otp import generate_otp, get_otp_expiry
-from utils.mailjet import send_otp_email
+from ..models import User, db
+from ..forms import LoginForm, VerifyOTPForm
+from ..utils.otp import generate_otp, get_otp_expiry
+from ..utils.mailjet import send_otp_email
 from datetime import datetime
 
 auth_bp = Blueprint("auth", __name__)

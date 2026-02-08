@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, session, flash, render_template
-from models import db, User
-from utils.helpers import is_logged_in, get_current_user
-from forms import SetupForm, AdminCreateUserForm, AdminCreateRoomForm
+from ..models import db, User, Room
+from ..utils.helpers import is_logged_in, get_current_user
+from ..forms import SetupForm, AdminCreateUserForm, AdminCreateRoomForm
 
 admin_bp = Blueprint("admin", __name__)
 
@@ -158,8 +158,6 @@ def admin_create_room():
         )
 
         # Simpler check using query
-        from models import Room
-
         existing_room = Room.query.filter_by(floor=floor_num, roomname=roomname).first()
         if existing_room:
             flash("A room with this name already exists on this floor", "error")
