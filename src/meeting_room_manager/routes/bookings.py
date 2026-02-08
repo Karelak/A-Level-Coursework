@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from models import db, Room, Booking
-from utils.helpers import is_logged_in, get_current_user, quicksort
-from forms import BookingForm, SearchSortForm
+from ..models import db, Room, Booking
+from ..utils.helpers import is_logged_in, get_current_user, quicksort
+from ..forms import BookingForm, SearchSortForm
 
 bookings_bp = Blueprint("bookings", __name__)
 

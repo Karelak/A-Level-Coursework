@@ -1,17 +1,17 @@
 from flask import Flask, session
 from datetime import datetime
-from models import db
 from flask_mailjet import Mailjet
 from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
-from config import Config
-from routes.auth import auth_bp
-from routes.dashboard import dashboard_bp
-from routes.rooms import rooms_bp
-from routes.bookings import bookings_bp
-from routes.support import support_bp
-from routes.admin import admin_bp
-from utils.helpers import get_current_user
+from .models import db
+from .config import Config
+from .routes.auth import auth_bp
+from .routes.dashboard import dashboard_bp
+from .routes.rooms import rooms_bp
+from .routes.bookings import bookings_bp
+from .routes.support import support_bp
+from .routes.admin import admin_bp
+from .utils.helpers import get_current_user
 
 mailjet = Mailjet()
 csrf = CSRFProtect()
@@ -54,8 +54,3 @@ def create_app():
         db.create_all()
 
     return app
-
-
-if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
