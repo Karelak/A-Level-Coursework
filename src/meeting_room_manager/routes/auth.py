@@ -6,6 +6,7 @@ from flask import (
     session,
     flash,
 )
+from werkzeug.security import check_password_hash, generate_password_hash
 from ..models import User, db
 from ..forms import LoginForm, VerifyOTPForm
 from ..utils.otp import generate_otp, get_otp_expiry
@@ -29,7 +30,16 @@ def login():
         password = form.password.data
         user = User.query.filter_by(email=email).first()
 
-        if user and user.password == password:
+        password_ok = False
+        if user:
+            if check_password_hash(user.password, password):
+                password_ok = True
+            elif user.password == password:
+                user.password = generate_password_hash(password)
+                db.session.commit()
+                password_ok = True
+
+        if password_ok:
             # Generate OTP and send email
             otp_code = generate_otp()
             otp_expiry = get_otp_expiry(minutes=5)

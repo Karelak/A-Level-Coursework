@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, url_for, session, flash, render_template
+from werkzeug.security import generate_password_hash
 from ..models import db, User, Room
 from ..utils.helpers import is_logged_in, get_current_user
 from ..forms import SetupForm, AdminCreateUserForm, AdminCreateRoomForm
@@ -33,7 +34,11 @@ def setup():
 
         try:
             user = User(
-                fname=fname, lname=lname, email=email, password=password, role="admin"
+                fname=fname,
+                lname=lname,
+                email=email,
+                password=generate_password_hash(password),
+                role="admin",
             )
             db.session.add(user)
             db.session.commit()
@@ -79,7 +84,11 @@ def admin_create_user():
 
         try:
             user = User(
-                fname=fname, lname=lname, email=email, password=password, role=role
+                fname=fname,
+                lname=lname,
+                email=email,
+                password=generate_password_hash(password),
+                role=role,
             )
             db.session.add(user)
             db.session.commit()
