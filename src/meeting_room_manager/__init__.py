@@ -4,7 +4,7 @@ from flask_mailjet import Mailjet
 from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
 from .models import db
-from .config import Config, Postgres_Config
+from .config import Config
 from .routes.auth import auth_bp
 from .routes.dashboard import dashboard_bp
 from .routes.rooms import rooms_bp
@@ -21,7 +21,7 @@ migrate = Migrate()
 def create_app():
     """Application factory function."""
     app = Flask(__name__)
-    app.config.from_object(Postgres_Config)
+    app.config.from_object(Config)
 
     db.init_app(app)
     mailjet.init_app(app)
