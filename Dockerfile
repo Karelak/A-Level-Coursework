@@ -23,7 +23,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install -r requirements.txt
 
 USER appuser
-
+ARG MAILJET_API_KEY
+ARG MAILJET_API_SECRET
+ARG MAILJET_DEFAULT_SENDER
+ARG PG_HOST
+ARG PG_PORT
+ARG PG_USER
+ARG PG_PASSWORD
+ARG PG_DB
 COPY . .
 
 # Copy and load environment variables
