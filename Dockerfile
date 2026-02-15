@@ -33,9 +33,7 @@ ARG PG_PASSWORD
 ARG PG_DB
 COPY . .
 
-# Copy and load environment variables
-COPY .env .
-RUN export $(cat .env | xargs)
+
 
 EXPOSE 8000
 
