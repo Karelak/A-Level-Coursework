@@ -27,7 +27,7 @@ USER appuser
 COPY . .
 
 # Copy and load environment variables
-COPY example.env .
+COPY .env .
 RUN export $(cat .env | xargs)
 
 EXPOSE 8000
